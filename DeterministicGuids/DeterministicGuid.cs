@@ -139,10 +139,14 @@ namespace DeterministicGuids
         public static Guid Create(Guid namespaceId, string name, Version version)
         {
             if (namespaceId == Guid.Empty)
+            {
                 throw new ArgumentException("Namespace cannot be an empty GUID.", nameof(namespaceId));
+            }
 
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name), "Name cannot be null or empty.");
+            }
 
             int numericVersion = (int)version;
 
