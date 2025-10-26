@@ -15,6 +15,7 @@
 		<PackageReference Include="coverlet.collector" />
 		<PackageReference Include="FluentAssertions" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Microsoft.TestPlatform" />
 		<PackageReference Include="xunit" />
 		<PackageReference Include="xunit.runner.visualstudio" />
 	</ItemGroup>
