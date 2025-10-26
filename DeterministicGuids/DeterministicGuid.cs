@@ -137,10 +137,14 @@ namespace DeterministicGuids
         {
             // validate
             if (namespaceId == Guid.Empty)
+            {
                 throw new ArgumentException("Namespace cannot be an empty GUID.", nameof(namespaceId));
+            }
 
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentNullException(nameof(name), "Name cannot be null or empty.");
+            }
 
             // numeric version 3 or 5
             var numericVersion = (int)version;
@@ -238,7 +242,9 @@ namespace DeterministicGuids
                     hasher.AppendData(nameBytes);
 
                     if (!hasher.TryGetHashAndReset(hashBuffer, out _))
+                    {
                         throw new InvalidOperationException("Hash computation failed.");
+                    }
                 }
 
                 // 4. First 16 bytes of hash becomes the basis of the GUID
