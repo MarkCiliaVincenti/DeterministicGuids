@@ -58,6 +58,7 @@ Guid idV5 = DeterministicGuid.Create(ns, key);
 
 Console.WriteLine(idV5);
 // Same ns + key + version (5) will always produce the same Guid
+```
 
 ## Credits
 Check out our [list of contributors](https://github.com/MarkCiliaVincenti/DeterministicGuids/blob/master/CONTRIBUTORS.md)!
