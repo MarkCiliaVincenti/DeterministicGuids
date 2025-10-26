@@ -24,9 +24,12 @@ namespace DeterministicGuids
         /// </summary>
         public static class Namespaces
         {
-            // Compatible with Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic
-
-            // "b8bfc711-ed0b-4151-a4fd-26a749825f7b"
+            /// <summary>
+            /// Represents a deterministic GUID for command operations (b8bfc711-ed0b-4151-a4fd-26a749825f7b).
+            /// </summary>
+            /// <remarks>This GUID is compatible with the
+            /// Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic library and is used to uniquely identify
+            /// command-related operations.</remarks>
             public static readonly Guid Commands = new(
                 0xb8bfc711,
                 0xed0b,
@@ -34,7 +37,12 @@ namespace DeterministicGuids
                 0xa4, 0xfd, 0x26, 0xa7, 0x49, 0x82, 0x5f, 0x7b
             );
 
-            // "115a74c3-19dd-4753-b31e-f366eb3e2005"
+            /// <summary>
+            /// Represents a unique identifier for events (115a74c3-19dd-4753-b31e-f366eb3e2005).
+            /// </summary>
+            /// <remarks>This GUID is compatible with the
+            /// Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic library and is used to uniquely identify
+            /// event-related operations.</remarks>
             public static readonly Guid Events = new(
                 0x115a74c3,
                 0x19dd,
@@ -44,7 +52,12 @@ namespace DeterministicGuids
 
             // RFC 4122 Appendix C
 
-            // "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+            /// <summary>
+            /// Represents the GUID for the DNS namespace as defined in RFC 4122 Appendix C (6ba7b810-9dad-11d1-80b4-00c04fd430c8).
+            /// </summary>
+            /// <remarks>This GUID is used as a namespace identifier for DNS names when generating
+            /// name-based UUIDs (version 3 or 5). It is a constant value and should be used in conjunction with a
+            /// name-based UUID generation method to create a UUID that is unique to a specific DNS name.</remarks>
             public static readonly Guid Dns = new(
                 0x6ba7b810,
                 0x9dad,
@@ -52,7 +65,12 @@ namespace DeterministicGuids
                 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8
             );
 
-            // "6ba7b811-9dad-11d1-80b4-00c04fd430c8"
+            /// <summary>
+            /// Represents the namespace identifier for URLs as defined in RFC 4122 Appendix C (6ba7b811-9dad-11d1-80b4-00c04fd430c8).
+            /// </summary>
+            /// <remarks>This GUID is used as a namespace identifier for URLs when generating
+            /// name-based UUIDs (version 3 or 5). It is a constant value and should be used in conjunction with a
+            /// name-based UUID generation method to create a UUID that is unique to a specific URL.</remarks>
             public static readonly Guid Url = new(
                 0x6ba7b811,
                 0x9dad,
@@ -60,7 +78,12 @@ namespace DeterministicGuids
                 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8
             );
 
-            // "6ba7b812-9dad-11d1-80b4-00c04fd430c8"
+            /// <summary>
+            /// Represents the ISO OID namespace identifier as defined in RFC 4122 Appendix C (6ba7b812-9dad-11d1-80b4-00c04fd430c8).
+            /// </summary>
+            /// <remarks>This <see cref="Guid"/> is used as a namespace identifier for UUIDs generated
+            /// according to the ISO OID standard. It is a constant value and should be used when creating UUIDs that
+            /// need to be unique within the ISO OID namespace.</remarks>
             public static readonly Guid IsoOid = new(
                 0x6ba7b812,
                 0x9dad,
@@ -68,7 +91,11 @@ namespace DeterministicGuids
                 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8
             );
 
-            // "6ba7b814-9dad-11d1-80b4-00c04fd430c8"
+            /// <summary>
+            /// Represents the GUID for the X.500 Distinguished Name (DN) namespace as defined in RFC 4122 Appendix C (6ba7b814-9dad-11d1-80b4-00c04fd430c8).
+            /// </summary>
+            /// <remarks>This GUID is used as a namespace identifier for UUIDs generated from X.500
+            /// Distinguished Names.</remarks>
             public static readonly Guid X500Dn = new(
                 0x6ba7b814,
                 0x9dad,
