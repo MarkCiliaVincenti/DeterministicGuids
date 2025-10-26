@@ -24,7 +24,7 @@
 		<AnalysisLevel>latest</AnalysisLevel>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>DeterministicGuids.snk</AssemblyOriginatorKeyFile>
-		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+		<ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
 		<DelaySign>false</DelaySign>
 		<ImplicitUsings>false</ImplicitUsings>
 		<AllowUnsafeBlocks Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</AllowUnsafeBlocks>
