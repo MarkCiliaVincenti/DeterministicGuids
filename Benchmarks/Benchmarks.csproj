@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic" Version="5.0.0" />
+	  <PackageReference Include="BenchmarkDotNet" Version="0.15.4" />
+	  <PackageReference Include="UUIDNext" Version="4.2.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DeterministicGuids\DeterministicGuids.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<Optimize>true</Optimize>
+	</PropertyGroup>
+
+</Project>
