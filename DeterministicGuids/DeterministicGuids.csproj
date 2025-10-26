@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0</TargetFrameworks>
+		<Authors>Mark Cilia Vincenti</Authors>
+		<RepositoryUrl>https://github.com/MarkCiliaVincenti/DeterministicGuids.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/MarkCiliaVincenti/DeterministicGuids</PackageProjectUrl>
+		<Copyright>MIT</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Version>1.0.0</Version>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+		<Description>A small, allocation-conscious, thread-safe .NET utility for generating name-based deterministic UUIDs (a.k.a. GUIDs) using RFC 4122 version 3 (MD5) and version 5 (SHA-1).</Description>
+		<Copyright>© 2025 Mark Cilia Vincenti</Copyright>
+		<PackageTags>guid,uuid,deterministic,stable</PackageTags>
+		<RepositoryType>git</RepositoryType>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IsPackable>true</IsPackable>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>DeterministicGuids.snk</AssemblyOriginatorKeyFile>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+		<ImplicitUsings>false</ImplicitUsings>
+		<AllowUnsafeBlocks Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</AllowUnsafeBlocks>
+		<NoWarn>IDE0180</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(DefineConstants.Contains(AOT_COMPATIBLE))">
+		<IsAotCompatible>true</IsAotCompatible>
+		<PublishAot>true</PublishAot>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(DefineConstants.Contains(TRIMMING_COMPATIBLE))">
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimmerDefaultAction>link</TrimmerDefaultAction>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Optimize>true</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Properties\PublishProfiles\**" />
+		<EmbeddedResource Remove="Properties\PublishProfiles\**" />
+		<None Remove="Properties\PublishProfiles\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\logo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\CONTRIBUTORS.md">
+			<Pack>False</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" />
+		<PackageReference Include="System.Memory" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))" />
+	</ItemGroup>
+</Project>

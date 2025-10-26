@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <!-- Outer frame gradient -->
+    <linearGradient id="frameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Left half (namespace / input) -->
+    <linearGradient id="nsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#312E81"/>
+    </linearGradient>
+
+    <!-- Right half (GUID / output) -->
+    <linearGradient id="guidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0F766E"/>
+    </linearGradient>
+
+    <!-- Clip to keep the *outer* corners rounded -->
+    <clipPath id="innerClip">
+      <rect x="12" y="12" width="104" height="104" rx="24" ry="24"/>
+    </clipPath>
+
+    <style>
+      .half-text {
+        font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 36px;
+        font-weight: 700;
+        fill: #ffffff;
+        dominant-baseline: middle;
+        text-anchor: middle;
+      }
+
+      .inner-border {
+        fill: none;
+        stroke: rgba(0,0,0,0.4);
+        stroke-width: 2;
+      }
+    </style>
+  </defs>
+
+  <!-- Outer rounded square frame -->
+  <rect x="4" y="4" width="120" height="120" rx="24" ry="24" fill="url(#frameGrad)"/>
+
+  <!-- Inner split body, clipped so only the outer corners round -->
+  <g clip-path="url(#innerClip)">
+    <!-- Left half: full height, square right edge -->
+    <rect x="12" y="12" width="52" height="104"
+          fill="url(#nsGrad)"/>
+
+    <!-- Right half: full height, square left edge -->
+    <rect x="64" y="12" width="52" height="104"
+          fill="url(#guidGrad)"/>
+  </g>
+
+  <!-- Subtle outline around the inner body to separate it from the frame -->
+  <rect x="12" y="12" width="104" height="104" rx="24" ry="24"
+        class="inner-border"/>
+
+  <!-- Centered letters:
+       D is centered within the left half
+       G is centered within the right half -->
+  <text x="38" y="64" class="half-text">D</text>
+  <text x="90" y="64" class="half-text">G</text>
+</svg>
