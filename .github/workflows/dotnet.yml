@@ -19,10 +19,6 @@ jobs:
       with:
         dotnet-version: 9.0.x
         
-    - name: New global.json
-      run: dotnet new globaljson
-      working-directory: Benchmarks        
-        
     - name: Restore dependencies
       run: dotnet restore
       
@@ -36,11 +32,3 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-    - name: Run benchmark (net8.0)
-      run: dotnet run --framework net8.0 --configuration Release --exporters json --filter '*'
-      working-directory: Benchmarks
-      
-    - name: Run benchmark (net9.0)
-      run: dotnet run --framework net9.0 --configuration Release --exporters json --filter '*'
-      working-directory: Benchmarks
