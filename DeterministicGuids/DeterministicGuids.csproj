@@ -68,7 +68,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" />
-		<PackageReference Include="System.Memory" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))" />
+		<PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" Version="1.2.39" />
+		<PackageReference Include="System.Memory" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))" Version="4.6.3" />
 	</ItemGroup>
 </Project>

@@ -1,24 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net481;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>netcoreapp2.2;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
+		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x5qj-9vmx-7g6g" />
 		<NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2xjx-v99w-gqf3" />
 		<NuGetAuditSuppress Include="https://github.com/advisories/GHSA-6px8-22w5-w334" />
-		<PackageReference Include="coverlet.collector" />
-		<PackageReference Include="FluentAssertions" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" />
-		<PackageReference Include="xunit" />
-		<PackageReference Include="xunit.runner.visualstudio" />
+		<PackageReference Include="coverlet.collector" Version="6.0.4" />
+		<PackageReference Include="FluentAssertions" Version="8.8.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.3" Condition=" '$(TargetFramework)' == 'netcoreapp2.2' " />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net7.0'" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" Condition=" '$(TargetFramework)' == 'net8.0' " />
+		<PackageReference Include="xunit" Version="2.9.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.0.2" Condition=" '$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net7.0' ">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" Condition=" '$(TargetFramework)' == 'net8.0' ">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <ProjectReference Include="..\DeterministicGuids\DeterministicGuids.csproj" />
 	</ItemGroup>
