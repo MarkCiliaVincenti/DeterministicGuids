@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using FluentAssertions;
+using System.Collections.Generic;
 
 namespace DeterministicGuids.Tests;
 
@@ -33,5 +34,44 @@ public class DeterministicGuidTests
 
         // Assert
         actual.Should().Be(expectedGuid);
+    }
+
+    [Fact]
+    public void TestNamespaces()
+    {
+        // Just to make sure they work without exceptions
+        var guid1 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Commands, "test");
+        var guid2 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Events, "test");
+        var guid3 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, "test");
+        var guid4 = DeterministicGuid.Create(DeterministicGuid.Namespaces.IsoOid, "test");
+        var guid5 = DeterministicGuid.Create(DeterministicGuid.Namespaces.X500Dn, "test");
+        var guid6 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Url, "test");
+
+        guid1.Should().Be(new Guid("4aef759d-fda7-5277-b6a4-b921eb736bdf"));
+        guid2.Should().Be(new Guid("47817435-6388-5db4-8bc1-8c8d5a10696d"));
+        guid3.Should().Be(new Guid("4be0643f-1d98-573b-97cd-ca98a65347dd"));
+        guid4.Should().Be(new Guid("b428b5d9-df19-5bb9-a1dc-115e071b836c"));
+        guid5.Should().Be(new Guid("63a3ab2b-61b8-5b04-ae2f-70d3875c6e97"));
+        guid6.Should().Be(new Guid("da5b8893-d6ca-5c1c-9a9c-91f40a2a3649"));
+    }
+
+    [Fact]
+    public void EmptyGuidShouldThrow()
+    {
+        Action action = () =>
+        {
+            DeterministicGuid.Create(Guid.Empty, "test");
+        };
+        action.Should().Throw<ArgumentException>();        
+    }
+
+    [Fact]
+    public void EmptyNameShouldThrow()
+    {
+        Action action = () =>
+        {
+            DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, "");
+        };
+        action.Should().Throw<ArgumentNullException>();
     }
 }
