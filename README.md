@@ -60,5 +60,14 @@ Console.WriteLine(idV5);
 // Same ns + key + version (5) will always produce the same Guid
 ```
 
+## Benchmarks
+DeterministicGuids stacks very well against other libraries in terms of speed and memory usage. Here are some benchmarks with values taken directly from a run in GitHub Actions.
+
+| Method                                                     | Mean     | Error    | StdDev   | Ratio | RatioSD | Gen0    | Allocated  | Alloc Ratio |
+|----------------------------------------------------------- |---------:|---------:|---------:|------:|--------:|--------:|-----------:|------------:|
+| DeterministicGuids                                         | 596.3 us |  6.56 us |  5.81 us |  1.00 |    0.01 |       - |    2.22 KB |        1.00 |
+| Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic | 975.9 us | 19.32 us | 35.82 us |  1.64 |    0.06 | 48.8281 | 1236.92 KB |      557.24 |
+| UUIDNext                                                   | 662.0 us |  9.61 us |  7.51 us |  1.11 |    0.02 | 38.0859 |  939.76 KB |      423.37 |
+
 ## Credits
 Check out our [list of contributors](https://github.com/MarkCiliaVincenti/DeterministicGuids/blob/master/CONTRIBUTORS.md)!
