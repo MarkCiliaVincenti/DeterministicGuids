@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp2.2;net6.0;net7.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>netcoreapp2.2;netcoreapp3.1;net6.0;net7.0;net8.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
+		<NoWarn>NU1903</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
