@@ -1,6 +1,7 @@
 ﻿using Be.Vlaanderen.Basisregisters.Generators.Guid;
 using BenchmarkDotNet.Attributes;
 using DeterministicGuids;
+using NGuid;
 using UUIDNext;
 
 namespace Benchmarks;
@@ -22,4 +23,8 @@ public class Benchmarks
     [Benchmark]
     public Guid UUIDNext() =>
         Uuid.NewNameBased(ns, name);
+
+    [Benchmark]
+    public Guid NGuid() =>
+        GuidHelpers.CreateFromName(ns, name);
 }
