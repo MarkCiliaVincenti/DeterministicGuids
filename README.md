@@ -63,11 +63,12 @@ Console.WriteLine(idV5);
 ## Benchmarks
 DeterministicGuids stacks very well against other libraries in terms of speed and memory usage. Here are some benchmarks with values taken directly from a run in GitHub Actions.
 
-| Method                                                     | Mean     | Error    | StdDev   | Ratio | RatioSD | Gen0    | Allocated  | Alloc Ratio |
-|----------------------------------------------------------- |---------:|---------:|---------:|------:|--------:|--------:|-----------:|------------:|
-| DeterministicGuids                                         | 596.3 us |  6.56 us |  5.81 us |  1.00 |    0.01 |       - |    2.22 KB |        1.00 |
-| Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic | 975.9 us | 19.32 us | 35.82 us |  1.64 |    0.06 | 48.8281 | 1236.92 KB |      557.24 |
-| UUIDNext                                                   | 662.0 us |  9.61 us |  7.51 us |  1.11 |    0.02 | 38.0859 |  939.76 KB |      423.37 |
+| Method                                                     | Mean     | Error     | StdDev    | Ratio | Gen0   | Allocated | Alloc Ratio |
+|----------------------------------------------------------- |---------:|----------:|----------:|------:|-------:|----------:|------------:|
+| DeterministicGuids                                         | 1.021 us | 0.0012 us | 0.0009 us |  1.00 |      - |         - |          NA |
+| Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic | 1.494 us | 0.0061 us | 0.0054 us |  1.46 | 0.0744 |    1264 B |          NA |
+| UUIDNext                                                   | 1.085 us | 0.0026 us | 0.0022 us |  1.06 | 0.0572 |     960 B |          NA |
+| NGuid                                                      | 1.153 us | 0.0016 us | 0.0015 us |  1.13 |      - |         - |          NA |
 
 ## Credits
 Check out our [list of contributors](https://github.com/MarkCiliaVincenti/DeterministicGuids/blob/master/CONTRIBUTORS.md)!

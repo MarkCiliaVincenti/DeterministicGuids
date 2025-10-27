@@ -5,3 +5,4 @@
 
 * [Mark Cilia Vincenti](https://github.com/MarkCiliaVincenti) as the project owner
 * [Digitaal Vlaanderen](https://github.com/Informatievlaanderen) on whose [code](https://github.com/Informatievlaanderen/deterministic-guid-generator) this library was originally based on
+* [Bradley Grainger](https://github.com/bgrainger) for his benchmark improvements
