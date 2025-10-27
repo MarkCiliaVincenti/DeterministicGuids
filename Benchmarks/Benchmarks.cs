@@ -12,29 +12,14 @@ public class Benchmarks
     private static readonly Guid ns = Guid.NewGuid();
 
     [Benchmark(Baseline = true)]
-    public void DeterministicGuids()
-    {
-        Parallel.ForEach(Enumerable.Range(0, 1000), _ =>
-        {
-            var guid = DeterministicGuid.Create(ns, name);
-        }); 
-    }
+    public Guid DeterministicGuids() =>
+        DeterministicGuid.Create(ns, name);
 
     [Benchmark]
-    public void Be_Vlaanderen_Basisregisters_Generators_Guid_Deterministic()
-    {
-        Parallel.ForEach(Enumerable.Range(0, 1000), _ =>
-        {
-            var guid = Deterministic.Create(ns, name);
-        });
-    }
+    public Guid Be_Vlaanderen_Basisregisters_Generators_Guid_Deterministic() =>
+        Deterministic.Create(ns, name);
 
     [Benchmark]
-    public void UUIDNext()
-    {
-        Parallel.ForEach(Enumerable.Range(0, 1000), _ =>
-        {
-            var guid = Uuid.NewNameBased(ns, name);
-        });
-    }
+    public Guid UUIDNext() =>
+        Uuid.NewNameBased(ns, name);
 }
