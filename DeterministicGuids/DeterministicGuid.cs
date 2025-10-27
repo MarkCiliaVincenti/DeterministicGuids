@@ -15,7 +15,7 @@ namespace DeterministicGuids
     /// <summary>
     /// Deterministic, namespace+name based UUIDs (RFC 4122 §4.3, v3 MD5 / v5 SHA-1).
     /// </summary>
-#if NET8_0_OR_GREATER
+#if NET5_0_OR_GREATER
     // Micro-opt: skip zeroing stackalloc locals (safe: we always fill before read)
     [SkipLocalsInit]
 #endif
@@ -126,6 +126,9 @@ namespace DeterministicGuids
         /// <summary>
         /// Create a deterministic UUID (default: version 5 / SHA-1).
         /// </summary>
+#if NET5_0_OR_GREATER
+        [SkipLocalsInit]
+#endif
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Guid Create(Guid namespaceId, string name)
             => Create(namespaceId, name, Version.SHA1);
@@ -136,6 +139,9 @@ namespace DeterministicGuids
         /// <param name="namespaceId">Namespace GUID (must not be Guid.Empty).</param>
         /// <param name="name">Name within the namespace (UTF-8 encoded).</param>
         /// <param name="version">Deterministic UUID version to generate (v3 MD5 or v5 SHA-1).</param>
+#if NET5_0_OR_GREATER
+        [SkipLocalsInit]
+#endif
         public static Guid Create(Guid namespaceId, string name, Version version)
         {
             if (namespaceId == Guid.Empty)
@@ -193,8 +199,8 @@ namespace DeterministicGuids
             // 4. .NET 8 Guid ctor can accept big-endian bytes directly
             return new Guid(uuidBe, bigEndian: true);
 
-#elif NET6_0_OR_GREATER || NETSTANDARD2_1
-            // Fast path for .NET 6 / .NET 7 / .NET Standard 2.1:
+#elif NET5_0_OR_GREATER || NETSTANDARD2_1
+            // Fast path for .NET 5 / .NET 6 / .NET 7 / .NET Standard 2.1:
             // Differences vs .NET 8:
             //   - We cannot write Guid as big-endian directly, so we:
             //       * Write namespaceId to nsLe (internal layout),

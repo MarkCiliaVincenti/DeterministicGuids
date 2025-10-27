@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
 		<Authors>Mark Cilia Vincenti</Authors>
 		<RepositoryUrl>https://github.com/MarkCiliaVincenti/DeterministicGuids.git</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/MarkCiliaVincenti/DeterministicGuids</PackageProjectUrl>
 		<Copyright>MIT</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageReleaseNotes>Major optimizations and benchmarks.</PackageReleaseNotes>
+		<PackageReleaseNotes>Small optimization.</PackageReleaseNotes>
 		<Description>A small, allocation-conscious, thread-safe .NET utility for generating name-based deterministic UUIDs (a.k.a. GUIDs) using RFC 4122 version 3 (MD5) and version 5 (SHA-1).</Description>
 		<Copyright>© 2025 Mark Cilia Vincenti</Copyright>
 		<PackageTags>guid,uuid,deterministic,stable</PackageTags>
 		<RepositoryType>git</RepositoryType>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<AssemblyVersion>1.0.2.0</AssemblyVersion>
-		<FileVersion>1.0.2.0</FileVersion>
+		<AssemblyVersion>1.0.3.0</AssemblyVersion>
+		<FileVersion>1.0.3.0</FileVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<IsPackable>true</IsPackable>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
@@ -27,7 +27,7 @@
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 		<DelaySign>false</DelaySign>
 		<ImplicitUsings>false</ImplicitUsings>
-		<AllowUnsafeBlocks Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net5.0'))">true</AllowUnsafeBlocks>
 		<NoWarn>IDE0180</NoWarn>
 	</PropertyGroup>
 
