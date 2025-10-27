@@ -61,14 +61,18 @@ Console.WriteLine(idV5);
 ```
 
 ## Benchmarks
-DeterministicGuids stacks very well against other libraries in terms of speed and memory usage. Here are some benchmarks with values taken directly from a run in GitHub Actions.
+DeterministicGuids stacks very well against other libraries in terms of speed, whilst being allocation-free. Here are some benchmarks with values taken directly from a run in GitHub Actions running .NET 8.0.
 
 | Method                                                     | Mean     | Error     | StdDev    | Ratio | Gen0   | Allocated | Alloc Ratio |
 |----------------------------------------------------------- |---------:|----------:|----------:|------:|-------:|----------:|------------:|
-| DeterministicGuids                                         | 1.021 us | 0.0012 us | 0.0009 us |  1.00 |      - |         - |          NA |
-| Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic | 1.494 us | 0.0061 us | 0.0054 us |  1.46 | 0.0744 |    1264 B |          NA |
-| UUIDNext                                                   | 1.085 us | 0.0026 us | 0.0022 us |  1.06 | 0.0572 |     960 B |          NA |
-| NGuid                                                      | 1.153 us | 0.0016 us | 0.0015 us |  1.13 |      - |         - |          NA |
+| DeterministicGuids                                         | 1.074 us | 0.0009 us | 0.0008 us |  1.00 |      - |         - |          NA |
+| Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic | 1.652 us | 0.0024 us | 0.0021 us |  1.54 | 0.0496 |    1264 B |          NA |
+| UUIDNext                                                   | 1.213 us | 0.0012 us | 0.0011 us |  1.13 | 0.0381 |     960 B |          NA |
+| NGuid                                                      | 1.204 us | 0.0015 us | 0.0013 us |  1.12 |      - |         - |          NA |
+| Elephant.Uuidv5Utilities                                   | 1.839 us | 0.0037 us | 0.0031 us |  1.71 | 0.0515 |    1296 B |          NA |
+| Enbrea.GuidFactory                                         | 1.757 us | 0.0031 us | 0.0027 us |  1.64 | 0.0515 |    1296 B |          NA |
+| GuidPhantom                                                | 1.666 us | 0.0024 us | 0.0023 us |  1.55 | 0.0496 |    1264 B |          NA |
+| unique                                                     | 1.975 us | 0.0035 us | 0.0029 us |  1.84 | 0.0610 |    1592 B |          NA |
 
 ## Credits
 Check out our [list of contributors](https://github.com/MarkCiliaVincenti/DeterministicGuids/blob/master/CONTRIBUTORS.md)!
