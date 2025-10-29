@@ -12,7 +12,7 @@
 		<PackageReference Include="GuidPhantom" Version="0.0.7" />
 		<PackageReference Include="NGuid" Version="1.0.0" />
 		<PackageReference Include="unique" Version="0.0.1" />
-		<PackageReference Include="UUIDNext" Version="4.2.1" />
+		<PackageReference Include="UUIDNext" Version="4.2.2" />
 	</ItemGroup>
 
 	<ItemGroup>
