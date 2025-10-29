@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net481;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BenchmarkDotNet" Version="0.15.4" />
+		<PackageReference Include="Elephant.Uuidv5Utilities" Version="1.0.0" />
+		<PackageReference Include="GuidPhantom" Version="0.0.7" />
+		<PackageReference Include="NGuid" Version="1.0.0" />
+		<PackageReference Include="unique" Version="0.0.1" />
+		<PackageReference Include="UUIDNext" Version="4.2.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DeterministicGuids\DeterministicGuids.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<Optimize>true</Optimize>
+	</PropertyGroup>
+
+</Project>

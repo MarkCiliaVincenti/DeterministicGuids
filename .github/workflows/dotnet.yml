@@ -46,3 +46,23 @@ jobs:
     - name: Run benchmark (net9.0)
       run: dotnet run --framework net9.0 --configuration Release --exporters json --filter '*'
       working-directory: Benchmarks
+
+    - name: Run benchmark (net6.0)
+      run: dotnet run --framework net6.0 --configuration Release --exporters json --filter '*'
+      working-directory: Benchmarks
+      
+    - name: Run benchmark (net481)
+      run: dotnet run --framework net481 --configuration Release --exporters json --filter '*'
+      working-directory: BenchmarksLegacy
+
+    - name: Run benchmark (netcoreapp2.1)
+      run: dotnet run --framework netcoreapp2.1 --configuration Release --exporters json --filter '*'
+      working-directory: BenchmarksLegacy
+
+    - name: Run benchmark (netcoreapp3.1)
+      run: dotnet run --framework netcoreapp3.1 --configuration Release --exporters json --filter '*'
+      working-directory: BenchmarksLegacy
+
+    - name: Run benchmark (net5.0)
+      run: dotnet run --framework net5.0 --configuration Release --exporters json --filter '*'
+      working-directory: BenchmarksLegacy

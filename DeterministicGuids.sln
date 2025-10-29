@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeterministicGuids.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{2311A35A-630F-8D56-15CD-BBB525570F8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarksLegacy", "BenchmarksLegacy\BenchmarksLegacy.csproj", "{39BEE7E2-C87D-4FA7-8356-6EA3D351023A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{2311A35A-630F-8D56-15CD-BBB525570F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2311A35A-630F-8D56-15CD-BBB525570F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2311A35A-630F-8D56-15CD-BBB525570F8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39BEE7E2-C87D-4FA7-8356-6EA3D351023A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39BEE7E2-C87D-4FA7-8356-6EA3D351023A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39BEE7E2-C87D-4FA7-8356-6EA3D351023A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39BEE7E2-C87D-4FA7-8356-6EA3D351023A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
