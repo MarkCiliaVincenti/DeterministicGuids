@@ -186,13 +186,14 @@ namespace DeterministicGuids
             Encoding.UTF8.GetBytes(name, concat[16..]);
 
             // 2. Hash namespace||name using per-thread hasher into a stack buffer
+#pragma warning disable CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
             var hasher8 = version switch
             {
                 Version.SHA1 => Sha1Tls.Value!,
                 Version.SHA256 => Sha256Tls.Value!,
-                Version.MD5 => Md5Tls.Value!,
-                _ => throw new ArgumentOutOfRangeException(nameof(version))
+                Version.MD5 => Md5Tls.Value!
             };
+#pragma warning restore CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
 
             int hashLen = hasher8.HashSize / 8; // 16, 20, or 32
             Span<byte> hashBuf = hashLen <= 64 ? stackalloc byte[hashLen] : new byte[hashLen];
@@ -244,13 +245,14 @@ namespace DeterministicGuids
             Encoding.UTF8.GetBytes(name.AsSpan(), concat[16..]);
 
             // 4. hash into stackalloc via thread-local HashAlgorithm
+#pragma warning disable CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
             var hasher6 = version switch
             {
                 Version.SHA1 => Sha1Tls.Value!,
                 Version.SHA256 => Sha256Tls.Value!,
-                Version.MD5 => Md5Tls.Value!,
-                _ => throw new ArgumentOutOfRangeException(nameof(version))
+                Version.MD5 => Md5Tls.Value!
             };
+#pragma warning restore CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
 
             int hashLen = hasher6.HashSize / 8; // 16, 20, or 32
             Span<byte> hashBuf = hashLen <= 64 ? stackalloc byte[hashLen] : new byte[hashLen];
@@ -280,13 +282,14 @@ namespace DeterministicGuids
             // Use TransformBlock/TransformFinalBlock to hash [nsBE || nameUTF8]
             // Keep ArrayPool for large-ish buffers; Guid(byte[]) requires a real array.
 
+#pragma warning disable CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
             var hasher20 = version switch
             {
                 Version.SHA1 => Sha1Tls.Value!,
                 Version.SHA256 => Sha256Tls.Value!,
-                Version.MD5 => Md5Tls.Value!,
-                _ => throw new ArgumentOutOfRangeException(nameof(version))
+                Version.MD5 => Md5Tls.Value!
             };
+#pragma warning restore CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
 
             // Encode name (array overload only on ns2.0)
             int nameLen = Encoding.UTF8.GetByteCount(name);

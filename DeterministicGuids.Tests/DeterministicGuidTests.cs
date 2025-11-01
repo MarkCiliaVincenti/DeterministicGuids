@@ -126,4 +126,14 @@ public class DeterministicGuidTests
         deterministicGuid.Should().Be(nGuid);
     }
 #endif
+
+    [Fact]
+    public void CheckV8CompatibilityWithRFC()
+    {
+        var name = "www.example.com";
+        // Act
+        var deterministicGuid = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, name, DeterministicGuid.Version.SHA256);
+        // Assert
+        deterministicGuid.Should().Be(Guid.Parse("5c146b14-3c52-8afd-938a-375d0df1fbf6"));
+    }
 }
