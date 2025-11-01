@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic" Version="5.0.0" />
-	  <PackageReference Include="BenchmarkDotNet" Version="0.15.4" />
+	  <PackageReference Include="BenchmarkDotNet" Version="0.15.5" />
 	  <PackageReference Include="Elephant.Uuidv5Utilities" Version="1.0.0" />
 	  <PackageReference Include="Enbrea.GuidFactory" Version="0.10.0" />
 	  <PackageReference Include="GuidPhantom" Version="0.0.7" />
