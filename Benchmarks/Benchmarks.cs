@@ -20,7 +20,7 @@ public class Benchmarks
     public Guid DeterministicGuids() =>
         DeterministicGuid.Create(ns, name);
 
-    [Benchmark(Description = "Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic")]
+    [Benchmark(Description = "Be.Vlaanderen...Deterministic")]
     public Guid Be_Vlaanderen_Basisregisters_Generators_Guid_Deterministic() =>
         Deterministic.Create(ns, name);
 

@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+
 #if NETSTANDARD2_0
 using System.Buffers;
 #endif
@@ -113,18 +114,24 @@ namespace DeterministicGuids
         public enum Version
         {
             /// <summary>
-            /// UUIDv3 (MD5 hashing)
+            /// UUID v3 (MD5 hashing)
             /// </summary>
             MD5 = 3,
 
             /// <summary>
-            /// UUIDv5 (SHA-1 hashing)
+            /// UUID v5 (SHA-1 hashing)
             /// </summary>
-            SHA1 = 5
+            SHA1 = 5,
+
+            /// <summary>
+            /// UUID v8 (SHA-256 hashing)
+            /// </summary>
+            /// <remarks>UUID v8 is a custom format reserved for vendor-specific use cases, allowing developers to create UUIDs with unique characteristics. This could lead to compatibility issues.</remarks>
+            SHA256 = 8
         }
 
         /// <summary>
-        /// Create a deterministic UUID (default: version 5 / SHA-1).
+        /// Create a deterministic UUID (default: v5 SHA-1).
         /// </summary>
 #if NET5_0_OR_GREATER
         [SkipLocalsInit]
@@ -138,7 +145,7 @@ namespace DeterministicGuids
         /// </summary>
         /// <param name="namespaceId">Namespace GUID (must not be Guid.Empty).</param>
         /// <param name="name">Name within the namespace (UTF-8 encoded).</param>
-        /// <param name="version">Deterministic UUID version to generate (v3 MD5 or v5 SHA-1).</param>
+        /// <param name="version">Deterministic UUID version to generate (v3 MD5, v5 SHA-1 or v8 SHA-256).</param>
 #if NET5_0_OR_GREATER
         [SkipLocalsInit]
 #endif
@@ -179,11 +186,17 @@ namespace DeterministicGuids
             Encoding.UTF8.GetBytes(name, concat[16..]);
 
             // 2. Hash namespace||name using per-thread hasher into a stack buffer
-            HashAlgorithm hasher8 = (version == Version.MD5)
-                ? Md5Tls.Value!
-                : Sha1Tls.Value!;
+            var hasher8 = version switch
+            {
+                Version.SHA1 => Sha1Tls.Value!,
+                Version.SHA256 => Sha256Tls.Value!,
+                Version.MD5 => Md5Tls.Value!,
+                _ => throw new ArgumentOutOfRangeException(nameof(version))
+            };
 
-            Span<byte> hashBuf = stackalloc byte[20]; // fits SHA-1 (20) and MD5 (16)
+            int hashLen = hasher8.HashSize / 8; // 16, 20, or 32
+            Span<byte> hashBuf = hashLen <= 64 ? stackalloc byte[hashLen] : new byte[hashLen];
+
             hasher8.TryComputeHash(concat, hashBuf, out _);
 
             // 3. Take first 16 bytes from hash as the UUID body (big-endian)
@@ -231,11 +244,17 @@ namespace DeterministicGuids
             Encoding.UTF8.GetBytes(name.AsSpan(), concat[16..]);
 
             // 4. hash into stackalloc via thread-local HashAlgorithm
-            HashAlgorithm hasher6 = (version == Version.MD5)
-                ? Md5Tls.Value!
-                : Sha1Tls.Value!;
+            var hasher6 = version switch
+            {
+                Version.SHA1 => Sha1Tls.Value!,
+                Version.SHA256 => Sha256Tls.Value!,
+                Version.MD5 => Md5Tls.Value!,
+                _ => throw new ArgumentOutOfRangeException(nameof(version))
+            };
 
-            Span<byte> hashBuf = stackalloc byte[20]; // SHA-1 = 20, MD5 = 16
+            int hashLen = hasher6.HashSize / 8; // 16, 20, or 32
+            Span<byte> hashBuf = hashLen <= 64 ? stackalloc byte[hashLen] : new byte[hashLen];
+
             hasher6.TryComputeHash(concat, hashBuf, out _);
 
             // 5. Copy first 16 hash bytes into 'be' buffer (big-endian UUID body)
@@ -254,66 +273,78 @@ namespace DeterministicGuids
             return new Guid(le);
 
 #else
-            // Fallback path for .NET Standard 2.0
-            // We DON'T have:
-            //   - Guid.TryWriteBytes
-            //   - Guid(ReadOnlySpan<byte>) ctor
-            //   - HashAlgorithm.TryComputeHash
-            // So we:
-            //   1. namespaceId.ToByteArray() (alloc),
-            //   2. swap it to big-endian into stackalloc,
-            //   3. rent [namespace_be || UTF8(name)] buffer,
-            //   4. ComputeHash(...) (allocates hash[]),
-            //   5. swap hash result, then new Guid(byte[]) because Span ctor doesn't exist.
+            // .NET Standard 2.0:
+            // - No Guid.TryWriteBytes
+            // - No Guid(ReadOnlySpan<byte>) ctor
+            // - No HashAlgorithm.TryComputeHash
+            // Use TransformBlock/TransformFinalBlock to hash [nsBE || nameUTF8]
+            // Keep ArrayPool for large-ish buffers; Guid(byte[]) requires a real array.
 
-            HashAlgorithm hasher20 = (version == Version.MD5)
-                ? Md5Tls.Value!
-                : Sha1Tls.Value!;
+            var hasher20 = version switch
+            {
+                Version.SHA1 => Sha1Tls.Value!,
+                Version.SHA256 => Sha256Tls.Value!,
+                Version.MD5 => Md5Tls.Value!,
+                _ => throw new ArgumentOutOfRangeException(nameof(version))
+            };
 
-            // 1. namespace bytes in internal layout (allocates 16-byte array)
+            // Encode name (array overload only on ns2.0)
+            int nameLen = Encoding.UTF8.GetByteCount(name);
+            byte[] rentedName = ArrayPool<byte>.Shared.Rent(nameLen);
+            int written = Encoding.UTF8.GetBytes(name, 0, name.Length, rentedName, 0);
+
+            // Namespace: unavoidable 16B alloc to get internal layout
             byte[] nsLeArr = namespaceId.ToByteArray();
 
-            // 2. copy & swap to big-endian
-            Span<byte> nsBe = stackalloc byte[16];
-            nsLeArr.AsSpan().CopyTo(nsBe);
-            SwapToBigEndianInPlace(nsBe);
-
-            // 3. encode name into rented buffer
-            int nameLen = Encoding.UTF8.GetByteCount(name);
-            int totalLen = 16 + nameLen;
-
-            byte[] rented = ArrayPool<byte>.Shared.Rent(totalLen);
+            // Rent a 16B buffer for namespace in big-endian and swap via helper
+            byte[] rentedNsBe = ArrayPool<byte>.Shared.Rent(16);
             Guid result;
             try
             {
-                Span<byte> concat = rented.AsSpan(0, totalLen);
+                // Copy internal layout -> rentedNsBe, then swap to BE
+                Buffer.BlockCopy(nsLeArr, 0, rentedNsBe, 0, 16);
+                SwapToBigEndianInPlace(rentedNsBe); // uses your Span-based helper
 
-                nsBe.CopyTo(concat.Slice(0, 16));
-                int written = Encoding.UTF8.GetBytes(name, 0, name.Length, rented, 16);
+                // Hash(namespaceBE || nameUTF8)
+                hasher20.Initialize();
+                hasher20.TransformBlock(rentedNsBe, 0, 16, null, 0);
+                hasher20.TransformFinalBlock(rentedName, 0, written);
 
-                // 4. ComputeHash() returns a new byte[], unavoidable on netstandard2.0
-                byte[] hashArr = hasher20.ComputeHash(rented, 0, 16 + written);
+                byte[] hashArr = hasher20.Hash ?? throw new InvalidOperationException("Hash computation failed.");
 
-                // 5. Take first 16 bytes of hash -> big-endian UUID body
-                Span<byte> be = stackalloc byte[16];
-                hashArr.AsSpan(0, 16).CopyTo(be);
+                // Leftmost 16 bytes -> BE UUID body
+                byte[] beArr = ArrayPool<byte>.Shared.Rent(16);
+                try
+                {
+                    Buffer.BlockCopy(hashArr, 0, beArr, 0, 16);
 
-                // version nibble / variant bits
-                be[6] = (byte)((be[6] & 0x0F) | (numericVersion << 4));
-                be[8] = (byte)((be[8] & 0x3F) | 0x80);
+                    // Set version nibble + variant bits in BE view
+                    beArr[6] = (byte)((beArr[6] & 0x0F) | (((int)version) << 4));
+                    beArr[8] = (byte)((beArr[8] & 0x3F) | 0x80);
 
-                // swap to Guid's internal layout
-                Span<byte> le = stackalloc byte[16];
-                ConvertUuidBigEndianToGuidLayout(be, le);
-
-                // netstandard2.0 doesn't have Guid(ReadOnlySpan<byte>) ctor,
-                // so we need a real array for new Guid(...)
-                byte[] finalArr = le.ToArray();
-                result = new Guid(finalArr);
+                    // Convert BE -> Guid layout using your helper
+                    byte[] leArr = ArrayPool<byte>.Shared.Rent(16);
+                    try
+                    {
+                        // helper is Span-based, so wrap arrays as spans
+                        ConvertUuidBigEndianToGuidLayout(beArr, leArr);
+                        // Guid(byte[]) copies the contents; safe to return array after
+                        result = new Guid(leArr);
+                    }
+                    finally
+                    {
+                        ArrayPool<byte>.Shared.Return(leArr);
+                    }
+                }
+                finally
+                {
+                    ArrayPool<byte>.Shared.Return(beArr);
+                }
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(rented);
+                ArrayPool<byte>.Shared.Return(rentedNsBe);
+                ArrayPool<byte>.Shared.Return(rentedName);
             }
 
             return result;
@@ -373,11 +404,11 @@ namespace DeterministicGuids
         }
 
         // Thread-local hashers:
-        // We keep one MD5 and one SHA1 per thread so we don't allocate HashAlgorithm
+        // We keep one MD5, one SHA-1 and one SHA-256 per thread so we don't allocate HashAlgorithm
         // objects per call.
         // NOTE: HashAlgorithm instances are not thread-safe, so ThreadLocal is important.
         private static readonly ThreadLocal<HashAlgorithm> Sha1Tls = new(SHA1.Create);
-
         private static readonly ThreadLocal<HashAlgorithm> Md5Tls = new(MD5.Create);
+        private static readonly ThreadLocal<HashAlgorithm> Sha256Tls = new(SHA256.Create);
     }
 }

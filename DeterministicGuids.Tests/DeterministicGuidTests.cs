@@ -2,7 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using FluentAssertions;
-using System.Collections.Generic;
+using NGuid;
+using System.Security.Cryptography;
+using System.Text;
+using UUIDNext;
 
 namespace DeterministicGuids.Tests;
 
@@ -74,4 +77,53 @@ public class DeterministicGuidTests
         };
         action.Should().Throw<ArgumentNullException>();
     }
+
+#if !NETCOREAPP2_2
+    [Fact]
+    public void CheckV3CompatibilityWithNGuid()
+    {
+        var name = "google.com";
+        // Act
+        var deterministicGuid = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, name, DeterministicGuid.Version.MD5);
+        var nGuid = GuidHelpers.CreateFromName(GuidHelpers.DnsNamespace, name, 3);
+        // Assert
+        deterministicGuid.Should().Be(nGuid);
+    }
+#endif
+
+    [Fact]
+    public void CheckV5CompatibilityWithUUIDNext()
+    {
+        var name = "google.com";
+        // Act
+        var deterministicGuid = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, name);
+        var uuidNextGuid = Uuid.NewNameBased(DeterministicGuid.Namespaces.Dns, name);
+        // Assert
+        deterministicGuid.Should().Be(uuidNextGuid);
+    }
+
+#if !NETCOREAPP2_2
+    [Fact]
+    public void CheckV5CompatibilityWithNGuid()
+    {
+        var name = "google.com";
+        // Act
+        var deterministicGuid = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, name);
+        var nGuid = GuidHelpers.CreateFromName(GuidHelpers.DnsNamespace, name);
+        // Assert
+        deterministicGuid.Should().Be(nGuid);
+    }
+
+    [Fact]
+    public void CheckV8CompatibilityWithNGuid()
+    {
+        var name = "www.example.com";
+        // Act
+        var deterministicGuid = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, name, DeterministicGuid.Version.SHA256);
+        var nGuid = GuidHelpers.CreateVersion8FromName(HashAlgorithmName.SHA256,
+                GuidHelpers.DnsNamespace, Encoding.ASCII.GetBytes(name));
+        // Assert
+        deterministicGuid.Should().Be(nGuid);
+    }
+#endif
 }
