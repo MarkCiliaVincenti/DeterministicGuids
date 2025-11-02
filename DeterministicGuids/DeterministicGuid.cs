@@ -275,82 +275,144 @@ namespace DeterministicGuids
             return new Guid(le);
 
 #else
-            // .NET Standard 2.0:
-            // - No Guid.TryWriteBytes
-            // - No Guid(ReadOnlySpan<byte>) ctor
-            // - No HashAlgorithm.TryComputeHash
-            // Use TransformBlock/TransformFinalBlock to hash [nsBE || nameUTF8]
-            // Keep ArrayPool for large-ish buffers; Guid(byte[]) requires a real array.
-
-#pragma warning disable CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
-            var hasher20 = version switch
+            if (version != Version.SHA256)
             {
-                Version.SHA1 => Sha1Tls.Value!,
-                Version.SHA256 => Sha256Tls.Value!,
-                Version.MD5 => Md5Tls.Value!
-            };
-#pragma warning restore CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
+                // Fallback path for .NET Standard 2.0
+                // We DON'T have:
+                //   - Guid.TryWriteBytes
+                //   - Guid(ReadOnlySpan<byte>) ctor
+                //   - HashAlgorithm.TryComputeHash
+                // So we:
+                //   1. namespaceId.ToByteArray() (alloc),
+                //   2. swap it to big-endian into stackalloc,
+                //   3. rent [namespace_be || UTF8(name)] buffer,
+                //   4. ComputeHash(...) (allocates hash[]),
+                //   5. swap hash result, then new Guid(byte[]) because Span ctor doesn't exist.
 
-            // Encode name (array overload only on ns2.0)
-            int nameLen = Encoding.UTF8.GetByteCount(name);
-            byte[] rentedName = ArrayPool<byte>.Shared.Rent(nameLen);
-            int written = Encoding.UTF8.GetBytes(name, 0, name.Length, rentedName, 0);
+                HashAlgorithm hasher20 = (version == Version.MD5)
+                    ? Md5Tls.Value!
+                    : Sha1Tls.Value!;
 
-            // Namespace: unavoidable 16B alloc to get internal layout
-            byte[] nsLeArr = namespaceId.ToByteArray();
+                // 1. namespace bytes in internal layout (allocates 16-byte array)
+                byte[] nsLeArr = namespaceId.ToByteArray();
 
-            // Rent a 16B buffer for namespace in big-endian and swap via helper
-            byte[] rentedNsBe = ArrayPool<byte>.Shared.Rent(16);
-            Guid result;
-            try
-            {
-                // Copy internal layout -> rentedNsBe, then swap to BE
-                Buffer.BlockCopy(nsLeArr, 0, rentedNsBe, 0, 16);
-                SwapToBigEndianInPlace(rentedNsBe); // uses your Span-based helper
+                // 2. copy & swap to big-endian
+                Span<byte> nsBe = stackalloc byte[16];
+                nsLeArr.AsSpan().CopyTo(nsBe);
+                SwapToBigEndianInPlace(nsBe);
 
-                // Hash(namespaceBE || nameUTF8)
-                hasher20.Initialize();
-                hasher20.TransformBlock(rentedNsBe, 0, 16, null, 0);
-                hasher20.TransformFinalBlock(rentedName, 0, written);
+                // 3. encode name into rented buffer
+                int nameLen = Encoding.UTF8.GetByteCount(name);
+                int totalLen = 16 + nameLen;
 
-                byte[] hashArr = hasher20.Hash ?? throw new InvalidOperationException("Hash computation failed.");
-
-                // Leftmost 16 bytes -> BE UUID body
-                byte[] beArr = ArrayPool<byte>.Shared.Rent(16);
+                byte[] rented = ArrayPool<byte>.Shared.Rent(totalLen);
+                Guid result;
                 try
                 {
-                    Buffer.BlockCopy(hashArr, 0, beArr, 0, 16);
+                    Span<byte> concat = rented.AsSpan(0, totalLen);
 
-                    // Set version nibble + variant bits in BE view
-                    beArr[6] = (byte)((beArr[6] & 0x0F) | (((int)version) << 4));
-                    beArr[8] = (byte)((beArr[8] & 0x3F) | 0x80);
+                    nsBe.CopyTo(concat.Slice(0, 16));
+                    int written = Encoding.UTF8.GetBytes(name, 0, name.Length, rented, 16);
 
-                    // Convert BE -> Guid layout using your helper
-                    byte[] leArr = ArrayPool<byte>.Shared.Rent(16);
+                    // 4. ComputeHash() returns a new byte[], unavoidable on netstandard2.0
+                    byte[] hashArr = hasher20.ComputeHash(rented, 0, 16 + written);
+
+                    // 5. Take first 16 bytes of hash -> big-endian UUID body
+                    Span<byte> be = stackalloc byte[16];
+                    hashArr.AsSpan(0, 16).CopyTo(be);
+
+                    // version nibble / variant bits
+                    be[6] = (byte)((be[6] & 0x0F) | (numericVersion << 4));
+                    be[8] = (byte)((be[8] & 0x3F) | 0x80);
+
+                    // swap to Guid's internal layout
+                    Span<byte> le = stackalloc byte[16];
+                    ConvertUuidBigEndianToGuidLayout(be, le);
+
+                    // netstandard2.0 doesn't have Guid(ReadOnlySpan<byte>) ctor,
+                    // so we need a real array for new Guid(...)
+                    byte[] finalArr = le.ToArray();
+                    result = new Guid(finalArr);
+                }
+                finally
+                {
+                    ArrayPool<byte>.Shared.Return(rented);
+                }
+
+                return result;
+            }
+            else // version == Version.SHA256
+            {
+                // .NET Standard 2.0:
+                // - No Guid.TryWriteBytes
+                // - No Guid(ReadOnlySpan<byte>) ctor
+                // - No HashAlgorithm.TryComputeHash
+                // Use TransformBlock/TransformFinalBlock to hash [nsBE || nameUTF8]
+                // Keep ArrayPool for large-ish buffers; Guid(byte[]) requires a real array.
+
+                var hasher20 = Sha256Tls.Value!;
+
+                // Encode name (array overload only on ns2.0)
+                int nameLen = Encoding.UTF8.GetByteCount(name);
+                byte[] rentedName = ArrayPool<byte>.Shared.Rent(nameLen);
+                int written = Encoding.UTF8.GetBytes(name, 0, name.Length, rentedName, 0);
+
+                // Namespace: unavoidable 16B alloc to get internal layout
+                byte[] nsLeArr = namespaceId.ToByteArray();
+
+                // Rent a 16B buffer for namespace in big-endian and swap via helper
+                byte[] rentedNsBe = ArrayPool<byte>.Shared.Rent(16);
+                Guid result;
+                try
+                {
+                    // Copy internal layout -> rentedNsBe, then swap to BE
+                    Buffer.BlockCopy(nsLeArr, 0, rentedNsBe, 0, 16);
+                    SwapToBigEndianInPlace(rentedNsBe); // uses your Span-based helper
+
+                    // Hash(namespaceBE || nameUTF8)
+                    hasher20.Initialize();
+                    hasher20.TransformBlock(rentedNsBe, 0, 16, null, 0);
+                    hasher20.TransformFinalBlock(rentedName, 0, written);
+
+                    byte[] hashArr = hasher20.Hash ?? throw new InvalidOperationException("Hash computation failed.");
+
+                    // Leftmost 16 bytes -> BE UUID body
+                    byte[] beArr = ArrayPool<byte>.Shared.Rent(16);
                     try
                     {
-                        // helper is Span-based, so wrap arrays as spans
-                        ConvertUuidBigEndianToGuidLayout(beArr, leArr);
-                        // Guid(byte[]) copies the contents; safe to return array after
-                        result = new Guid(leArr);
+                        Buffer.BlockCopy(hashArr, 0, beArr, 0, 16);
+
+                        // Set version nibble + variant bits in BE view
+                        beArr[6] = (byte)((beArr[6] & 0x0F) | 0x80);
+                        beArr[8] = (byte)((beArr[8] & 0x3F) | 0x80);
+
+                        // Convert BE -> Guid layout using your helper
+                        byte[] leArr = ArrayPool<byte>.Shared.Rent(16);
+                        try
+                        {
+                            // helper is Span-based, so wrap arrays as spans
+                            ConvertUuidBigEndianToGuidLayout(beArr, leArr);
+                            // Guid(byte[]) copies the contents; safe to return array after
+                            result = new Guid(leArr);
+                        }
+                        finally
+                        {
+                            ArrayPool<byte>.Shared.Return(leArr);
+                        }
                     }
                     finally
                     {
-                        ArrayPool<byte>.Shared.Return(leArr);
+                        ArrayPool<byte>.Shared.Return(beArr);
                     }
                 }
                 finally
                 {
-                    ArrayPool<byte>.Shared.Return(beArr);
+                    ArrayPool<byte>.Shared.Return(rentedNsBe);
+                    ArrayPool<byte>.Shared.Return(rentedName);
                 }
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(rentedNsBe);
-                ArrayPool<byte>.Shared.Return(rentedName);
-            }
 
-            return result;
+                return result;
+            }
 #endif
         }
 
