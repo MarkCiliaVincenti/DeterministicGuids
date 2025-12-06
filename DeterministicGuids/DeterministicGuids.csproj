@@ -7,16 +7,16 @@
 		<PackageProjectUrl>https://github.com/MarkCiliaVincenti/DeterministicGuids</PackageProjectUrl>
 		<Copyright>MIT</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageReleaseNotes>Optimizations for .NET Standard 2.0 (.NET Framework and .NET Core up to 2.2).</PackageReleaseNotes>
+		<PackageReleaseNotes>Minor optimizations.</PackageReleaseNotes>
 		<Description>A small, allocation-conscious, thread-safe .NET utility for generating name-based deterministic UUIDs (a.k.a. GUIDs) using RFC 4962 v3 (MD5), v5 (SHA-1) and v8 (SHA-256).</Description>
 		<Copyright>© 2025 Mark Cilia Vincenti</Copyright>
 		<PackageTags>guid,uuid,deterministic,stable</PackageTags>
 		<RepositoryType>git</RepositoryType>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<AssemblyVersion>1.0.5.0</AssemblyVersion>
-		<FileVersion>1.0.5.0</FileVersion>
+		<AssemblyVersion>1.0.6.0</AssemblyVersion>
+		<FileVersion>1.0.6.0</FileVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<IsPackable>true</IsPackable>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
