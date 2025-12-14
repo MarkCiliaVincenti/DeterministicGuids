@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".github/workflows/dotnet.yml" />
+    <File Path="CONTRIBUTORS.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="stylecop.json" />
+  </Folder>
+  <Project Path="Benchmarks/Benchmarks.csproj" />
+  <Project Path="BenchmarksLegacy/BenchmarksLegacy.csproj" />
+  <Project Path="DeterministicGuids.Tests/DeterministicGuids.Tests.csproj" />
+  <Project Path="DeterministicGuids/DeterministicGuids.csproj" />
+</Solution>
