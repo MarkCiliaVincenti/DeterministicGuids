@@ -36,10 +36,6 @@ public class Benchmarks
     public Guid Elephant_Uuidv5Utilities() =>
         Uuidv5Utils.GenerateGuid(ns, name);
 
-    [Benchmark(Description = "Enbrea.GuidFactory")]
-    public Guid Enbrea_GuidFactory() =>
-        GuidGenerator.Create(ns, name);
-
     [Benchmark]
     public Guid GuidPhantom() =>
         GuidKit.CreateVersion5(ns, name);
