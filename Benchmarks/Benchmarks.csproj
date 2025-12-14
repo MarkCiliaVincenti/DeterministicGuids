@@ -10,7 +10,6 @@
 	  <PackageReference Include="Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic" Version="5.0.0" />
 	  <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
 	  <PackageReference Include="Elephant.Uuidv5Utilities" Version="1.0.0" />
-	  <PackageReference Include="Enbrea.GuidFactory" Version="0.11.0" />
 	  <PackageReference Include="GuidPhantom" Version="0.0.7" />
 	  <PackageReference Include="NGuid" Version="1.0.0" />
 	  <PackageReference Include="unique" Version="0.0.1" />
