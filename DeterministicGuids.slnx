@@ -9,6 +9,7 @@
   </Folder>
   <Project Path="Benchmarks/Benchmarks.csproj" />
   <Project Path="BenchmarksLegacy/BenchmarksLegacy.csproj" />
+  <Project Path="BenchmarksNet6/BenchmarksNet6.csproj" Id="cc0f0c78-4447-49bb-a0a4-604eecb74649" />
   <Project Path="DeterministicGuids.Tests/DeterministicGuids.Tests.csproj" />
   <Project Path="DeterministicGuids/DeterministicGuids.csproj" />
 </Solution>
