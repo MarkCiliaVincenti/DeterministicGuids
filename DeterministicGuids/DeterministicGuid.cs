@@ -325,7 +325,7 @@ namespace DeterministicGuids
                     hasher20.TransformBlock(rentedNsBe, 0, 16, null, 0);
                     hasher20.TransformFinalBlock(rentedName, 0, written);
 
-                    byte[] hashArr = hasher20.Hash ?? throw new InvalidOperationException("Hash computation failed.");
+                    byte[] hashArr = hasher20.Hash;
 
                     // Leftmost 16 bytes -> BE UUID body
                     byte[] beArr = ArrayPool<byte>.Shared.Rent(16);
