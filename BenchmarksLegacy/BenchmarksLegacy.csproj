@@ -4,6 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<TargetFrameworks>net481;netcoreapp3.1;net5.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 	</PropertyGroup>
 
 	<ItemGroup>

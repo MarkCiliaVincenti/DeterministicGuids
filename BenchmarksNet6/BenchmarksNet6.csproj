@@ -4,6 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<TargetFrameworks>net6.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 	</PropertyGroup>
 
 	<ItemGroup>
