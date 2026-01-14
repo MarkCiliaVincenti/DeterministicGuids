@@ -12,7 +12,7 @@ namespace DeterministicGuids.Tests;
 public class DeterministicGuidTests
 {
     [Theory]
-    // https://www.ietf.org/rfc/rfc4122.txt
+    // https://www.ietf.org/rfc/rfc9562.txt
     [InlineData("6ba7b810-9dad-11d1-80b4-00c04fd430c8", "www.widgets.com", DeterministicGuid.Version.MD5, "3d813cbb-47fb-32ba-91df-831e1593ac29")]
 
     // https://docs.python.org/2/library/uuid.html
@@ -46,9 +46,10 @@ public class DeterministicGuidTests
         var guid1 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Commands, "test");
         var guid2 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Events, "test");
         var guid3 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, "test");
-        var guid4 = DeterministicGuid.Create(DeterministicGuid.Namespaces.IsoOid, "test");
-        var guid5 = DeterministicGuid.Create(DeterministicGuid.Namespaces.X500Dn, "test");
+        var guid4 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Oid, "test");
+        var guid5 = DeterministicGuid.Create(DeterministicGuid.Namespaces.X500, "test");
         var guid6 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Url, "test");
+        var guid7 = DeterministicGuid.Create(DeterministicGuid.Namespaces.CborPen, "test");
 
         guid1.Should().Be(new Guid("4aef759d-fda7-5277-b6a4-b921eb736bdf"));
         guid2.Should().Be(new Guid("47817435-6388-5db4-8bc1-8c8d5a10696d"));
@@ -56,6 +57,7 @@ public class DeterministicGuidTests
         guid4.Should().Be(new Guid("b428b5d9-df19-5bb9-a1dc-115e071b836c"));
         guid5.Should().Be(new Guid("63a3ab2b-61b8-5b04-ae2f-70d3875c6e97"));
         guid6.Should().Be(new Guid("da5b8893-d6ca-5c1c-9a9c-91f40a2a3649"));
+        guid7.Should().Be(new Guid("510d2f81-c15c-54f6-bddb-22f83c2e0b9f"));
     }
 
     [Fact]
@@ -65,9 +67,10 @@ public class DeterministicGuidTests
         var guid1 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Commands, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
         var guid2 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Events, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
         var guid3 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
-        var guid4 = DeterministicGuid.Create(DeterministicGuid.Namespaces.IsoOid, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
-        var guid5 = DeterministicGuid.Create(DeterministicGuid.Namespaces.X500Dn, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
+        var guid4 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Oid, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
+        var guid5 = DeterministicGuid.Create(DeterministicGuid.Namespaces.X500, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
         var guid6 = DeterministicGuid.Create(DeterministicGuid.Namespaces.Url, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
+        var guid7 = DeterministicGuid.Create(DeterministicGuid.Namespaces.CborPen, "this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible. this is a long string because we need to check a different path where stackalloc would not be possible.");
 
         guid1.Should().Be(new Guid("b44858cb-cf06-5a81-9701-e61aabbb7baa"));
         guid2.Should().Be(new Guid("0c24c5f4-9429-5335-8bb9-7aa8ee739b3b"));
@@ -75,6 +78,7 @@ public class DeterministicGuidTests
         guid4.Should().Be(new Guid("9a24d617-c1c1-518e-aff4-ff06e122292d"));
         guid5.Should().Be(new Guid("00b41eb8-0331-5b1c-9217-f301bfb90666"));
         guid6.Should().Be(new Guid("6c3a74ab-4bb1-5350-a809-6f31506699f1"));
+        guid7.Should().Be(new Guid("5abf8f59-9c41-580d-9af2-d93b3bc99726"));
     }
 
     [Fact]

@@ -9,7 +9,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Version>1.0.8</Version>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageReleaseNotes>Micro optimization for netstandard2.0.</PackageReleaseNotes>
+		<PackageReleaseNotes>Update default IANA namespaces.</PackageReleaseNotes>
 		<Description>A small, allocation-conscious, thread-safe .NET utility for generating name-based deterministic UUIDs (a.k.a. GUIDs) using RFC 9562 v3 (MD5), v5 (SHA-1) and v8 (SHA-256).</Description>
 		<Copyright>© 2026 Mark Cilia Vincenti</Copyright>
 		<PackageTags>guid,uuid,deterministic,stable</PackageTags>
