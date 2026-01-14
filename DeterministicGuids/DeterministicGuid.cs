@@ -14,7 +14,7 @@ using System.Threading;
 namespace DeterministicGuids
 {
     /// <summary>
-    /// Deterministic, namespace+name based UUIDs (RFC 4122 §4.3, v3 MD5 / v5 SHA-1).
+    /// Deterministic, namespace+name based UUIDs (RFC 9562, v3 MD5 / v5 SHA-1).
     /// </summary>
 #if NET5_0_OR_GREATER
     // Micro-opt: skip zeroing stackalloc locals (safe: we always fill before read)
@@ -54,10 +54,10 @@ namespace DeterministicGuids
                 0xb3, 0x1e, 0xf3, 0x66, 0xeb, 0x3e, 0x20, 0x05
             );
 
-            // RFC 4122 Appendix C
+            // RFC 9562 Appendix A
 
             /// <summary>
-            /// Represents the GUID for the DNS namespace as defined in RFC 4122 Appendix C (6ba7b810-9dad-11d1-80b4-00c04fd430c8).
+            /// Represents the GUID for the DNS namespace as defined in RFC 9562 Appendix A (6ba7b810-9dad-11d1-80b4-00c04fd430c8).
             /// </summary>
             /// <remarks>This GUID is used as a namespace identifier for DNS names when generating
             /// name-based UUIDs (version 3 or 5). It is a constant value and should be used in conjunction with a
@@ -70,7 +70,7 @@ namespace DeterministicGuids
             );
 
             /// <summary>
-            /// Represents the namespace identifier for URLs as defined in RFC 4122 Appendix C (6ba7b811-9dad-11d1-80b4-00c04fd430c8).
+            /// Represents the namespace identifier for URLs as defined in RFC 9562 Appendix A (6ba7b811-9dad-11d1-80b4-00c04fd430c8).
             /// </summary>
             /// <remarks>This GUID is used as a namespace identifier for URLs when generating
             /// name-based UUIDs (version 3 or 5). It is a constant value and should be used in conjunction with a
@@ -83,12 +83,12 @@ namespace DeterministicGuids
             );
 
             /// <summary>
-            /// Represents the ISO OID namespace identifier as defined in RFC 4122 Appendix C (6ba7b812-9dad-11d1-80b4-00c04fd430c8).
+            /// Represents the ASN.1 Object Identifier namespace identifier as defined in RFC 9562 Appendix A (6ba7b812-9dad-11d1-80b4-00c04fd430c8).
             /// </summary>
             /// <remarks>This <see cref="Guid"/> is used as a namespace identifier for UUIDs generated
-            /// according to the ISO OID standard. It is a constant value and should be used when creating UUIDs that
-            /// need to be unique within the ISO OID namespace.</remarks>
-            public static readonly Guid IsoOid = new(
+            /// according to the OID standard. It is a constant value and should be used when creating UUIDs that
+            /// need to be unique within the OID namespace.</remarks>
+            public static readonly Guid Oid = new(
                 0x6ba7b812,
                 0x9dad,
                 0x11d1,
@@ -96,16 +96,28 @@ namespace DeterministicGuids
             );
 
             /// <summary>
-            /// Represents the GUID for the X.500 Distinguished Name (DN) namespace as defined in RFC 4122 Appendix C (6ba7b814-9dad-11d1-80b4-00c04fd430c8).
+            /// Represents the GUID for the X.500 Distinguished Name (DN) namespace as defined in RFC 9562 Appendix A (6ba7b814-9dad-11d1-80b4-00c04fd430c8).
             /// </summary>
             /// <remarks>This GUID is used as a namespace identifier for UUIDs generated from X.500
             /// Distinguished Names.</remarks>
-            public static readonly Guid X500Dn = new(
+            public static readonly Guid X500 = new(
                 0x6ba7b814,
                 0x9dad,
                 0x11d1,
                 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8
             );
+
+            /// <summary>
+            /// Represents the GUID for the Concise Binary Object Representation - Private Enterprise Number namespace as defined by IANA (47fbdabb-f2e4-55f0-bb39-3620c2f6df4e).
+            /// </summary>
+            /// <remarks>This GUID is used as a namespace identifier for UUIDs generated from X.500
+            /// Distinguished Names.</remarks>
+            public static readonly Guid CborPen = new(
+                0x47fbdabb,
+                0xf2e4,
+                0x55f0,
+                0xbb, 0x39, 0x36, 0x20, 0xc2, 0xf6, 0xdf, 0x4e
+            );            
         }
 
         /// <summary>
@@ -365,7 +377,7 @@ namespace DeterministicGuids
 #if !NET8_0_OR_GREATER
         /// <summary>
         /// Swap a GUID byte span from .NET's internal layout (first three fields little-endian)
-        /// into RFC 4122 network byte order (big-endian in those fields). Operates in-place.
+        /// into RFC 9562 network byte order (big-endian in those fields). Operates in-place.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void SwapToBigEndianInPlace(Span<byte> g)
@@ -382,7 +394,7 @@ namespace DeterministicGuids
         }
 
         /// <summary>
-        /// Convert UUID bytes expressed in big-endian RFC 4122 order into the byte layout
+        /// Convert UUID bytes expressed in big-endian RFC 9562 order into the byte layout
         /// that <see cref="Guid"/> expects in memory. Writes the converted bytes into <paramref name="guidLayout"/>.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
