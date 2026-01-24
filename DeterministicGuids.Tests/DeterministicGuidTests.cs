@@ -120,7 +120,7 @@ public class DeterministicGuidTests
         var name = "google.com";
         // Act
         var deterministicGuid = DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, name);
-        var uuidNextGuid = Uuid.NewNameBased(DeterministicGuid.Namespaces.Dns, name);
+        var uuidNextGuid = Uuid.NewNameBased(Uuid.Namespace.DNS, name);
         // Assert
         deterministicGuid.Should().Be(uuidNextGuid);
     }
