@@ -3,6 +3,7 @@
     <File Path=".github/workflows/dotnet.yml" />
     <File Path="CONTRIBUTORS.md" />
     <File Path="Directory.Build.props" />
+    <File Path="global.json" />
     <File Path="LICENSE" />
     <File Path="README.md" />
     <File Path="stylecop.json" />

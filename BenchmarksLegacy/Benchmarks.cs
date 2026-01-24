@@ -26,13 +26,13 @@ public class Benchmarks
     public Guid NGuid() =>
         GuidHelpers.CreateFromName(ns, name);
 
-    [Benchmark(Description = "Elephant.Uuidv5Utilities")]
-    public Guid Elephant_Uuidv5Utilities() =>
-        Uuidv5Utils.GenerateGuid(ns, name);
-
     [Benchmark]
     public Guid GuidPhantom() =>
         GuidKit.CreateVersion5(ns, name);
+
+    [Benchmark(Description = "Elephant.Uuidv5Utilities")]
+    public Guid Elephant_Uuidv5Utilities() =>
+        Uuidv5Utils.GenerateGuid(ns, name);
 
     [Benchmark(Description = "unique")]
     public Guid Unique() =>

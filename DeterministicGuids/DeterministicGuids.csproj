@@ -7,16 +7,16 @@
 		<PackageProjectUrl>https://github.com/MarkCiliaVincenti/DeterministicGuids</PackageProjectUrl>
 		<Copyright>MIT</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.8</Version>
+		<Version>1.0.9</Version>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageReleaseNotes>Update default IANA namespaces.</PackageReleaseNotes>
+		<PackageReleaseNotes>Enforcing consistent SDK version for total reproducible builds.</PackageReleaseNotes>
 		<Description>A small, allocation-conscious, thread-safe .NET utility for generating name-based deterministic UUIDs (a.k.a. GUIDs) using RFC 9562 v3 (MD5), v5 (SHA-1) and v8 (SHA-256).</Description>
 		<Copyright>© 2026 Mark Cilia Vincenti</Copyright>
 		<PackageTags>guid,uuid,deterministic,stable</PackageTags>
 		<RepositoryType>git</RepositoryType>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<AssemblyVersion>1.0.8.0</AssemblyVersion>
-		<FileVersion>1.0.8.0</FileVersion>
+		<AssemblyVersion>1.0.9.0</AssemblyVersion>
+		<FileVersion>1.0.9.0</FileVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<IsPackable>true</IsPackable>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
@@ -68,7 +68,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" Version="1.2.39" />
+		<PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" Version="2.0.1" />
 		<PackageReference Include="System.Memory" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))" Version="4.6.3" />
 	</ItemGroup>
 </Project>

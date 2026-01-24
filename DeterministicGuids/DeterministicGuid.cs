@@ -17,7 +17,6 @@ namespace DeterministicGuids
     /// Deterministic, namespace+name based UUIDs (RFC 9562, v3 MD5 / v5 SHA-1).
     /// </summary>
 #if NET5_0_OR_GREATER
-    // Micro-opt: skip zeroing stackalloc locals (safe: we always fill before read)
     [SkipLocalsInit]
 #endif
     public static class DeterministicGuid
