@@ -12,7 +12,7 @@
 		<PackageReleaseNotes>Enforcing consistent SDK version for total reproducible builds.</PackageReleaseNotes>
 		<Description>A small, allocation-conscious, thread-safe .NET utility for generating name-based deterministic UUIDs (a.k.a. GUIDs) using RFC 9562 v3 (MD5), v5 (SHA-1) and v8 (SHA-256).</Description>
 		<Copyright>© 2026 Mark Cilia Vincenti</Copyright>
-		<PackageTags>guid,uuid,deterministic,stable</PackageTags>
+		<PackageTags>guid,uuid,deterministic,stable,v3,v5,v8,rfc,9562,4122</PackageTags>
 		<RepositoryType>git</RepositoryType>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AssemblyVersion>1.0.9.0</AssemblyVersion>
