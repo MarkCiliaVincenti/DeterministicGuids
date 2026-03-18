@@ -14,7 +14,7 @@
 		<NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x5qj-9vmx-7g6g" />
 		<NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2xjx-v99w-gqf3" />
 		<NuGetAuditSuppress Include="https://github.com/advisories/GHSA-6px8-22w5-w334" />
-		<PackageReference Include="coverlet.collector" Version="6.0.4" />
+		<PackageReference Include="coverlet.collector" Version="8.0.1" />
 		<PackageReference Include="FluentAssertions" Version="8.8.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.3" Condition=" '$(TargetFramework)' == 'netcoreapp2.2' " />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net7.0'" />
