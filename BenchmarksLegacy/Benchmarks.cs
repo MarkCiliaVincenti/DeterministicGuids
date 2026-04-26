@@ -1,4 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
 using DeterministicGuids;
 using Elephant.Uuidv5Utilities;
 using GuidPhantom;
@@ -8,33 +10,61 @@ using UUIDNext;
 
 namespace BenchmarksLegacy;
 
+[Config(typeof(Config))]
 [MemoryDiagnoser]
 public class Benchmarks
 {
+    private class Config : ManualConfig
+    {
+        public Config()
+        {
+            var baseJob = Job.Default;
+
+            string[] targetVersions = [
+                "1.0.11-alpha",
+                "1.0.11-beta"
+            ];
+
+            AddJob(Job.MediumRun
+                .WithMsBuildArguments($"/p:DeterministicGuidsVersion={targetVersions[0]}")
+                .WithId($"v{targetVersions[0]}")
+                .WithBaseline(true) // Set the first target version as the baseline
+            );
+
+            for (int i = 1; i < targetVersions.Length; i++)
+            {
+                AddJob(Job.MediumRun
+                    .WithMsBuildArguments($"/p:DeterministicGuidsVersion={targetVersions[i]}")
+                    .WithId($"v{targetVersions[i]}")
+                );
+            }
+        }
+    }
+
     private const string name = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
     private static readonly Guid ns = Guid.NewGuid();
 
-    [Benchmark(Baseline = true)]
+    [Benchmark]
     public Guid DeterministicGuids() =>
         DeterministicGuid.Create(ns, name);
 
-    [Benchmark]
+    //[Benchmark]
     public Guid UUIDNext() =>
         Uuid.NewNameBased(ns, name);
 
-    [Benchmark]
+    //[Benchmark]
     public Guid NGuid() =>
         GuidHelpers.CreateFromName(ns, name);
 
-    [Benchmark]
+    //[Benchmark]
     public Guid GuidPhantom() =>
         GuidKit.CreateVersion5(ns, name);
 
-    [Benchmark(Description = "Elephant.Uuidv5Utilities")]
+    //[Benchmark(Description = "Elephant.Uuidv5Utilities")]
     public Guid Elephant_Uuidv5Utilities() =>
         Uuidv5Utils.GenerateGuid(ns, name);
 
-    [Benchmark(Description = "unique")]
+    //[Benchmark(Description = "unique")]
     public Guid Unique() =>
         NamedGuid.NewGuid(ns, name);
 }

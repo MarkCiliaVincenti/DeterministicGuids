@@ -5,9 +5,11 @@
 		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+		<DeterministicGuidsVersion Condition="'$(DeterministicGuidsVersion)' == ''">1.0.11-alpha</DeterministicGuidsVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="DeterministicGuids" Version="$(DeterministicGuidsVersion)" />
 		<PackageReference Include="Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic" Version="5.0.0" />
 		<PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
 		<PackageReference Include="Elephant.Uuidv5Utilities" Version="1.0.0" />
@@ -16,10 +18,6 @@
 		<PackageReference Include="NGuid" Version="1.0.0" />
 		<PackageReference Include="unique" Version="0.0.1" />
 		<PackageReference Include="UUIDNext" Version="4.2.4" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\DeterministicGuids\DeterministicGuids.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
