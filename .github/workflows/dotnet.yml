@@ -52,6 +52,10 @@ jobs:
     - name: Run benchmark (net8.0)
       run: dotnet run --framework net8.0 --configuration Release --exporters json --filter '*'
       working-directory: Benchmarks
+
+    - name: Run benchmark (net7.0)
+      run: dotnet run --framework net7.0 --configuration Release --exporters json --filter '*'
+      working-directory: BenchmarksNet6
       
     - name: Run benchmark (net6.0)
       run: dotnet run --framework net6.0 --configuration Release --exporters json --filter '*'
