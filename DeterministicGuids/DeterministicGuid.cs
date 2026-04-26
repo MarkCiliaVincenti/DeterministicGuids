@@ -116,7 +116,7 @@ namespace DeterministicGuids
                 0xf2e4,
                 0x55f0,
                 0xbb, 0x39, 0x36, 0x20, 0xc2, 0xf6, 0xdf, 0x4e
-            );            
+            );
         }
 
         /// <summary>
@@ -202,21 +202,33 @@ namespace DeterministicGuids
             if (version == Version.SHA1)
             {
                 Span<byte> hashBuf = stackalloc byte[20];
+#if NET7_0_OR_GREATER
+                SHA1.HashData(concat, hashBuf);
+#else
                 Sha1Tls.Value!.TryComputeHash(concat, hashBuf, out _);
+#endif
                 hashBuf[..16].CopyTo(uuidBe);
                 uuidBe[6] = (byte)((uuidBe[6] & 0x0F) | (5 << 4));
             }
             else if (version == Version.SHA256)
             {
                 Span<byte> hashBuf = stackalloc byte[32];
+#if NET7_0_OR_GREATER
+                SHA256.HashData(concat, hashBuf);
+#else
                 Sha256Tls.Value!.TryComputeHash(concat, hashBuf, out _);
+#endif
                 hashBuf[..16].CopyTo(uuidBe);
                 uuidBe[6] = (byte)((uuidBe[6] & 0x0F) | (8 << 4));
             }
             else // MD5
             {
                 Span<byte> hashBuf = stackalloc byte[16];
+#if NET7_0_OR_GREATER
+                MD5.HashData(concat, hashBuf);
+#else
                 Md5Tls.Value!.TryComputeHash(concat, hashBuf, out _);
+#endif
                 hashBuf.CopyTo(uuidBe);
                 uuidBe[6] = (byte)((uuidBe[6] & 0x0F) | (3 << 4));
             }
@@ -425,11 +437,13 @@ namespace DeterministicGuids
         }
 #endif
 
+#if !NET7_0_OR_GREATER
         // Thread-local hashers:
         // We keep one MD5, one SHA-1 and one SHA-256 per thread so we don't allocate HashAlgorithm
         // objects per call.
         private static readonly ThreadLocal<HashAlgorithm> Sha1Tls = new(SHA1.Create);
         private static readonly ThreadLocal<HashAlgorithm> Md5Tls = new(MD5.Create);
         private static readonly ThreadLocal<HashAlgorithm> Sha256Tls = new(SHA256.Create);
+#endif
     }
 }
