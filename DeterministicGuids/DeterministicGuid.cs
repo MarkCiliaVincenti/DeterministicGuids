@@ -5,8 +5,11 @@ using System;
 
 #if NETSTANDARD2_0
 using System.Buffers;
+using System.Buffers.Binary;
+
 #endif
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -341,7 +344,7 @@ namespace DeterministicGuids
                 {
                     // Copy internal layout -> rentedNsBe, then swap to BE
                     Buffer.BlockCopy(nsLeArr, 0, rentedNsBe, 0, 16);
-                    SwapToBigEndianInPlace(rentedNsBe); // uses your Span-based helper
+                    SwapToBigEndianInPlace(rentedNsBe);
 
                     // Hash(namespaceBE || nameUTF8)
                     hasher20.Initialize();
@@ -393,15 +396,31 @@ namespace DeterministicGuids
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void SwapToBigEndianInPlace(Span<byte> g)
         {
-            // time_low (bytes 0..3)
-            (g[0], g[3]) = (g[3], g[0]);
-            (g[1], g[2]) = (g[2], g[1]);
+            ref byte b = ref MemoryMarshal.GetReference(g);
+            ulong val = Unsafe.ReadUnaligned<ulong>(ref b);
 
-            // time_mid (bytes 4..5)
-            (g[4], g[5]) = (g[5], g[4]);
+            // On a little-endian system, Unsafe.ReadUnaligned reads g[0] into the
+            // least-significant byte. So:
+            //   bits [ 7.. 0] = g[0]   bits [15.. 8] = g[1]
+            //   bits [23..16] = g[2]   bits [31..24] = g[3]
+            //   bits [39..32] = g[4]   bits [47..40] = g[5]
+            //   bits [55..48] = g[6]   bits [63..56] = g[7]
+            //
+            // Goal: g[0]↔g[3], g[1]↔g[2], g[4]↔g[5], g[6]↔g[7]
+            // i.e. in bit terms, swap [ 7..0]↔[31..24], [15..8]↔[23..16],
+            //                         [39..32]↔[47..40], [55..48]↔[63..56]
 
-            // time_hi_and_version (bytes 6..7)
-            (g[6], g[7]) = (g[7], g[6]);
+            ulong swapped =
+                ((val & 0x0000_0000_0000_00FFUL) << 24) |  // g[0] → g[3] slot
+                ((val & 0x0000_0000_0000_FF00UL) << 8) |  // g[1] → g[2] slot
+                ((val & 0x0000_0000_00FF_0000UL) >> 8) |  // g[2] → g[1] slot
+                ((val & 0x0000_0000_FF00_0000UL) >> 24) |  // g[3] → g[0] slot
+                ((val & 0x0000_00FF_0000_0000UL) << 8) |  // g[4] → g[5] slot
+                ((val & 0x0000_FF00_0000_0000UL) >> 8) |  // g[5] → g[4] slot
+                ((val & 0x00FF_0000_0000_0000UL) << 8) |  // g[6] → g[7] slot
+                ((val & 0xFF00_0000_0000_0000UL) >> 8);   // g[7] → g[6] slot
+
+            Unsafe.WriteUnaligned(ref b, swapped);
         }
 
         /// <summary>
