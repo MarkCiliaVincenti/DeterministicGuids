@@ -10,10 +10,10 @@
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
 		<PackageReference Include="Elephant.Uuidv5Utilities" Version="1.0.0" />
-		<PackageReference Include="GuidPhantom" Version="0.0.7" />
+		<PackageReference Include="GuidPhantom" Version="0.0.8" />
 		<PackageReference Include="NGuid" Version="1.0.0" />
 		<PackageReference Include="unique" Version="0.0.1" />
-		<PackageReference Include="UUIDNext" Version="4.2.3" />
+		<PackageReference Include="UUIDNext" Version="4.2.4" />
 	</ItemGroup>
 
 	<ItemGroup>
