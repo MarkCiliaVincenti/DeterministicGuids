@@ -162,15 +162,7 @@ namespace DeterministicGuids
 #endif
         public static Guid Create(Guid namespaceId, string name, Version version)
         {
-            if (namespaceId == Guid.Empty)
-            {
-                throw new ArgumentException("Namespace cannot be an empty GUID.", nameof(namespaceId));
-            }
-
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException(nameof(name), "Name cannot be null or empty.");
-            }
+            name = name.Normalize(NormalizationForm.FormC);
 #if NET8_0_OR_GREATER
             int totalLen = 16 + Encoding.UTF8.GetByteCount(name);
 
