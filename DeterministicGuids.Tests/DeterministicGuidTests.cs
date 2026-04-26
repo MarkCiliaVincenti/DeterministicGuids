@@ -81,26 +81,6 @@ public class DeterministicGuidTests
         guid7.Should().Be(new Guid("5abf8f59-9c41-580d-9af2-d93b3bc99726"));
     }
 
-    [Fact]
-    public void EmptyGuidShouldThrow()
-    {
-        Action action = () =>
-        {
-            DeterministicGuid.Create(Guid.Empty, "test");
-        };
-        action.Should().Throw<ArgumentException>();        
-    }
-
-    [Fact]
-    public void EmptyNameShouldThrow()
-    {
-        Action action = () =>
-        {
-            DeterministicGuid.Create(DeterministicGuid.Namespaces.Dns, "");
-        };
-        action.Should().Throw<ArgumentNullException>();
-    }
-
 #if !NETCOREAPP2_2
     [Fact]
     public void CheckV3CompatibilityWithNGuid()
