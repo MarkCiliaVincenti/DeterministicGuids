@@ -23,7 +23,8 @@ public class Benchmarks
             string[] targetVersions = [
                 "1.0.11-alpha",
                 "1.0.11-beta",
-                "1.0.11-beta2"
+                "1.0.11-beta2",
+                "1.0.11-beta3",
             ];
 
             AddJob(Job.MediumRun
