@@ -18,7 +18,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="FluentAssertions" Version="8.9.0" />
+		<PackageReference Include="FluentAssertions" Version="8.10.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.3" Condition=" '$(TargetFramework)' == 'netcoreapp2.2' " />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net7.0'" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" Condition=" '$(TargetFramework)' == 'net8.0' " />
