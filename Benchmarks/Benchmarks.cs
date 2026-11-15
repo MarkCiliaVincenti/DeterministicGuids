@@ -29,6 +29,14 @@ public class Benchmarks
     public Guid NGuid() =>
         GuidHelpers.CreateFromName(ns, name);
 
+    [Benchmark(Description = "SequentialGuid")]
+    public Guid SequentialGuid() =>
+        GuidV5.Create(ns, name);
+
+    [Benchmark(Description = "Enbrea.GuidFactory")]
+    public Guid Enbrea_GuidFactory() =>
+        GuidGenerator.CreateVersion5(ns, name);
+
     [Benchmark(Description = "Be.Vlaanderen...Deterministic")]
     public Guid Be_Vlaanderen_Basisregisters_Generators_Guid_Deterministic() =>
         Deterministic.Create(ns, name);
@@ -37,10 +45,6 @@ public class Benchmarks
     public Guid GuidPhantom() =>
         GuidKit.CreateVersion5(ns, name);
 
-    [Benchmark(Description = "Enbrea.GuidFactory")]
-    public Guid Enbrea_GuidFactory() =>
-        GuidGenerator.CreateVersion5(ns, name);
-
     [Benchmark(Description = "Elephant.Uuidv5Utilities")]
     public Guid Elephant_Uuidv5Utilities() =>
         Uuidv5Utils.GenerateGuid(ns, name);
@@ -48,8 +52,4 @@ public class Benchmarks
     [Benchmark(Description = "unique")]
     public Guid Unique() =>
         NamedGuid.NewGuid(ns, name);
-
-    [Benchmark(Description = "SequentialGuid")]
-    public Guid SequentialGuid() =>
-        GuidV5.Create(ns, name);
 }
