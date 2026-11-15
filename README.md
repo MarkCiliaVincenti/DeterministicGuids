@@ -41,7 +41,8 @@ This is useful for:
   - `net5.0`
   - `net6.0`
   - `net7.0`
-  - `net8.0` (and above)
+  - `net8.0`
+  - `net11.0` (and above)
 
 On newer targets we take advantage of newer BCL APIs to reduce allocations to zero.
 
@@ -66,93 +67,114 @@ Console.WriteLine(idV5);
 ## Benchmarks
 DeterministicGuids stacks very well against other libraries in terms of speed, whilst being allocation-free. Here are some benchmarks with values taken directly from a run in GitHub Actions.
 
-### .NET 10.0.7 (10.0.7, 10.0.726.21808), X64 RyuJIT x86-64-v3
+### .NET 11.0.0 (11.0.0, 11.0.26.53018), X64 RyuJIT x86-64-v3
+| Method                        | Mean     | Error     | StdDev    | Median   | Ratio | RatioSD | Gen0   | Allocated |
+|------------------------------ |---------:|----------:|----------:|---------:|------:|--------:|-------:|----------:|
+| DeterministicGuids            | 1.019 us | 0.0020 us | 0.0016 us | 1.019 us |  1.00 |    0.00 |      - |         - |
+| UUIDNext                      | 1.029 us | 0.0090 us | 0.0080 us | 1.028 us |  1.01 |    0.01 |      - |         - |
+| SequentialGuid                | 1.140 us | 0.0027 us | 0.0023 us | 1.140 us |  1.12 |    0.00 |      - |         - |
+| NGuid                         | 1.149 us | 0.0121 us | 0.0113 us | 1.142 us |  1.13 |    0.01 |      - |         - |
+| Enbrea.GuidFactory            | 1.202 us | 0.0078 us | 0.0073 us | 1.203 us |  1.18 |    0.01 | 0.0305 |     536 B |
+| Be.Vlaanderen...Deterministic | 1.479 us | 0.0131 us | 0.0109 us | 1.476 us |  1.45 |    0.01 | 0.0744 |    1272 B |
+| GuidPhantom                   | 1.488 us | 0.0129 us | 0.0107 us | 1.485 us |  1.46 |    0.01 | 0.0744 |    1272 B |
+| Elephant.Uuidv5Utilities      | 1.703 us | 0.0341 us | 0.1000 us | 1.648 us |  1.67 |    0.10 | 0.0763 |    1304 B |
+| unique                        | 1.728 us | 0.0096 us | 0.0080 us | 1.733 us |  1.70 |    0.01 | 0.0916 |    1560 B |
+
+### .NET 10.0.15 (10.0.15, 10.0.1526.53008), X64 RyuJIT x86-64-v3
 | Method                        | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated |
 |------------------------------ |---------:|----------:|----------:|------:|--------:|-------:|----------:|
-| DeterministicGuids            | 1.041 us | 0.0179 us | 0.0158 us |  1.00 |    0.02 |      - |         - |
-| UUIDNext                      | 1.105 us | 0.0219 us | 0.0417 us |  1.06 |    0.04 |      - |         - |
-| NGuid                         | 1.189 us | 0.0227 us | 0.0465 us |  1.14 |    0.05 |      - |         - |
-| Be.Vlaanderen...Deterministic | 1.494 us | 0.0061 us | 0.0054 us |  1.44 |    0.02 | 0.0744 |    1272 B |
-| GuidPhantom                   | 1.545 us | 0.0172 us | 0.0366 us |  1.48 |    0.04 | 0.0744 |    1272 B |
-| Enbrea.GuidFactory            | 1.653 us | 0.0314 us | 0.0279 us |  1.59 |    0.03 | 0.0763 |    1304 B |
-| Elephant.Uuidv5Utilities      | 1.721 us | 0.0191 us | 0.0169 us |  1.65 |    0.03 | 0.0763 |    1304 B |
-| unique                        | 1.809 us | 0.0236 us | 0.0221 us |  1.74 |    0.03 | 0.0916 |    1560 B |
+| DeterministicGuids            | 1.032 us | 0.0086 us | 0.0081 us |  1.00 |    0.00 |      - |         - |
+| UUIDNext                      | 1.044 us | 0.0091 us | 0.0086 us |  1.01 |    0.01 |      - |         - |
+| NGuid                         | 1.145 us | 0.0025 us | 0.0020 us |  1.11 |    0.01 |      - |         - |
+| SequentialGuid                | 1.150 us | 0.0105 us | 0.0098 us |  1.11 |    0.01 |      - |         - |
+| Enbrea.GuidFactory            | 1.204 us | 0.0076 us | 0.0067 us |  1.17 |    0.01 | 0.0305 |     536 B |
+| Be.Vlaanderen...Deterministic | 1.502 us | 0.0110 us | 0.0103 us |  1.46 |    0.01 | 0.0744 |    1272 B |
+| GuidPhantom                   | 1.514 us | 0.0124 us | 0.0116 us |  1.47 |    0.02 | 0.0744 |    1272 B |
+| Elephant.Uuidv5Utilities      | 1.664 us | 0.0237 us | 0.0221 us |  1.61 |    0.02 | 0.0763 |    1304 B |
+| unique                        | 1.783 us | 0.0125 us | 0.0117 us |  1.73 |    0.02 | 0.0916 |    1560 B |
 
-### .NET 9.0.15 (9.0.15, 9.0.1526.17522), X64 RyuJIT x86-64-v3
+### .NET 9.0.23 (9.0.23, 9.0.2326.52216), X64 RyuJIT x86-64-v3
 | Method                        | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated |
 |------------------------------ |---------:|----------:|----------:|------:|--------:|-------:|----------:|
-| DeterministicGuids            | 1.045 us | 0.0192 us | 0.0179 us |  1.00 |    0.02 |      - |         - |
-| UUIDNext                      | 1.056 us | 0.0105 us | 0.0088 us |  1.01 |    0.02 |      - |         - |
-| NGuid                         | 1.166 us | 0.0159 us | 0.0124 us |  1.12 |    0.02 |      - |         - |
-| Be.Vlaanderen...Deterministic | 1.506 us | 0.0087 us | 0.0081 us |  1.44 |    0.02 | 0.0744 |    1272 B |
-| GuidPhantom                   | 1.509 us | 0.0103 us | 0.0097 us |  1.44 |    0.03 | 0.0744 |    1272 B |
-| Enbrea.GuidFactory            | 1.595 us | 0.0119 us | 0.0111 us |  1.53 |    0.03 | 0.0763 |    1304 B |
-| Elephant.Uuidv5Utilities      | 1.703 us | 0.0051 us | 0.0045 us |  1.63 |    0.03 | 0.0763 |    1304 B |
-| unique                        | 1.799 us | 0.0094 us | 0.0088 us |  1.72 |    0.03 | 0.0954 |    1600 B |
+| DeterministicGuids            | 1.047 us | 0.0105 us | 0.0088 us |  1.00 |    0.01 |      - |         - |
+| UUIDNext                      | 1.053 us | 0.0113 us | 0.0105 us |  1.01 |    0.01 |      - |         - |
+| NGuid                         | 1.164 us | 0.0113 us | 0.0100 us |  1.11 |    0.01 |      - |         - |
+| SequentialGuid                | 1.171 us | 0.0109 us | 0.0102 us |  1.12 |    0.01 |      - |         - |
+| Enbrea.GuidFactory            | 1.203 us | 0.0076 us | 0.0071 us |  1.15 |    0.01 | 0.0305 |     536 B |
+| GuidPhantom                   | 1.503 us | 0.0059 us | 0.0046 us |  1.44 |    0.01 | 0.0744 |    1272 B |
+| Be.Vlaanderen...Deterministic | 1.513 us | 0.0137 us | 0.0128 us |  1.44 |    0.02 | 0.0744 |    1272 B |
+| Elephant.Uuidv5Utilities      | 1.652 us | 0.0125 us | 0.0117 us |  1.58 |    0.02 | 0.0763 |    1304 B |
+| unique                        | 1.812 us | 0.0141 us | 0.0132 us |  1.73 |    0.02 | 0.0954 |    1600 B |
 
-### .NET 8.0.26 (8.0.26, 8.0.2626.16921), X64 RyuJIT x86-64-v3
-| Method                        | Mean     | Error     | StdDev    | Ratio | Gen0   | Allocated |
-|------------------------------ |---------:|----------:|----------:|------:|-------:|----------:|
-| DeterministicGuids            | 1.032 us | 0.0014 us | 0.0012 us |  1.00 |      - |         - |
-| UUIDNext                      | 1.050 us | 0.0011 us | 0.0010 us |  1.02 |      - |         - |
-| NGuid                         | 1.147 us | 0.0021 us | 0.0018 us |  1.11 |      - |         - |
-| Be.Vlaanderen...Deterministic | 1.531 us | 0.0052 us | 0.0046 us |  1.48 | 0.0744 |    1264 B |
-| GuidPhantom                   | 1.529 us | 0.0071 us | 0.0063 us |  1.48 | 0.0744 |    1264 B |
-| Enbrea.GuidFactory            | 1.615 us | 0.0077 us | 0.0068 us |  1.57 | 0.0763 |    1296 B |
-| Elephant.Uuidv5Utilities      | 1.671 us | 0.0084 us | 0.0078 us |  1.62 | 0.0763 |    1296 B |
-| unique                        | 1.818 us | 0.0132 us | 0.0117 us |  1.76 | 0.0935 |    1592 B |
+### .NET 8.0.34 (8.0.34, 8.0.3426.52217), X64 RyuJIT x86-64-v3
+| Method                        | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated |
+|------------------------------ |---------:|----------:|----------:|------:|--------:|-------:|----------:|
+| DeterministicGuids            | 1.033 us | 0.0098 us | 0.0092 us |  1.00 |    0.01 |      - |         - |
+| UUIDNext                      | 1.061 us | 0.0098 us | 0.0087 us |  1.03 |    0.01 |      - |         - |
+| NGuid                         | 1.156 us | 0.0064 us | 0.0057 us |  1.12 |    0.01 |      - |         - |
+| SequentialGuid                | 1.170 us | 0.0074 us | 0.0069 us |  1.13 |    0.01 |      - |         - |
+| Enbrea.GuidFactory            | 1.209 us | 0.0051 us | 0.0045 us |  1.17 |    0.01 | 0.0305 |     536 B |
+| Be.Vlaanderen...Deterministic | 1.509 us | 0.0126 us | 0.0112 us |  1.46 |    0.02 | 0.0744 |    1264 B |
+| GuidPhantom                   | 1.527 us | 0.0119 us | 0.0111 us |  1.48 |    0.02 | 0.0744 |    1264 B |
+| Elephant.Uuidv5Utilities      | 1.682 us | 0.0158 us | 0.0148 us |  1.63 |    0.02 | 0.0763 |    1296 B |
+| unique                        | 1.846 us | 0.0119 us | 0.0112 us |  1.79 |    0.02 | 0.0935 |    1592 B |
 
 ### .NET 7.0.20 (7.0.20, 7.0.2024.26716), X64 RyuJIT x86-64-v3
-| Method                        | Mean     | Error     | StdDev    | Ratio | Gen0   | Allocated |
-|------------------------------ |---------:|----------:|----------:|------:|-------:|----------:|
-| DeterministicGuids            | 1.064 us | 0.0023 us | 0.0018 us |  1.00 |      - |         - |
-| UUIDNext                      | 1.093 us | 0.0009 us | 0.0008 us |  1.03 |      - |         - |
-| NGuid                         | 1.176 us | 0.0015 us | 0.0013 us |  1.11 |      - |         - |
-| Be.Vlaanderen...Deterministic | 1.589 us | 0.0109 us | 0.0102 us |  1.49 | 0.0744 |    1264 B |
-| GuidPhantom                   | 1.584 us | 0.0049 us | 0.0038 us |  1.49 | 0.0744 |    1264 B |
-| Elephant.Uuidv5Utilities      | 1.758 us | 0.0115 us | 0.0102 us |  1.65 | 0.0763 |    1296 B |
-| unique                        | 1.999 us | 0.0065 us | 0.0058 us |  1.88 | 0.0916 |    1592 B |
+| Method                        | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated |
+|------------------------------ |---------:|----------:|----------:|------:|--------:|-------:|----------:|
+| DeterministicGuids            | 1.079 us | 0.0075 us | 0.0070 us |  1.00 |    0.00 |      - |         - |
+| UUIDNext                      | 1.097 us | 0.0012 us | 0.0010 us |  1.02 |    0.01 |      - |         - |
+| NGuid                         | 1.185 us | 0.0062 us | 0.0058 us |  1.10 |    0.01 |      - |         - |
+| SequentialGuid                | 1.533 us | 0.0126 us | 0.0118 us |  1.42 |    0.01 | 0.0458 |     768 B |
+| Be.Vlaanderen...Deterministic | 1.598 us | 0.0095 us | 0.0084 us |  1.48 |    0.01 | 0.0744 |    1264 B |
+| GuidPhantom                   | 1.608 us | 0.0114 us | 0.0101 us |  1.49 |    0.01 | 0.0744 |    1264 B |
+| Elephant.Uuidv5Utilities      | 1.802 us | 0.0184 us | 0.0172 us |  1.67 |    0.02 | 0.0763 |    1296 B |
+| unique                        | 1.997 us | 0.0224 us | 0.0210 us |  1.85 |    0.02 | 0.0916 |    1592 B |
 
 ### .NET 6.0.36 (6.0.36, 6.0.3624.51421), X64 RyuJIT x86-64-v3
 | Method                        | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated |
 |------------------------------ |---------:|----------:|----------:|------:|--------:|-------:|----------:|
-| DeterministicGuids            | 1.084 us | 0.0141 us | 0.0125 us |  1.00 |    0.02 |      - |         - |
-| UUIDNext                      | 1.109 us | 0.0013 us | 0.0013 us |  1.02 |    0.01 |      - |         - |
-| NGuid                         | 1.314 us | 0.0032 us | 0.0027 us |  1.21 |    0.01 |      - |         - |
-| Be.Vlaanderen...Deterministic | 1.540 us | 0.0037 us | 0.0033 us |  1.42 |    0.02 | 0.0744 |    1264 B |
-| GuidPhantom                   | 1.548 us | 0.0065 us | 0.0061 us |  1.43 |    0.02 | 0.0744 |    1264 B |
-| Elephant.Uuidv5Utilities      | 1.724 us | 0.0062 us | 0.0055 us |  1.59 |    0.02 | 0.0763 |    1296 B |
-| unique                        | 1.942 us | 0.0085 us | 0.0076 us |  1.79 |    0.02 | 0.0916 |    1592 B |
+| DeterministicGuids            | 1.070 us | 0.0096 us | 0.0090 us |  1.00 |    0.00 |      - |         - |
+| UUIDNext                      | 1.114 us | 0.0074 us | 0.0065 us |  1.04 |    0.01 |      - |         - |
+| NGuid                         | 1.200 us | 0.0078 us | 0.0073 us |  1.12 |    0.01 |      - |         - |
+| SequentialGuid                | 1.479 us | 0.0134 us | 0.0125 us |  1.38 |    0.02 | 0.0458 |     768 B |
+| Be.Vlaanderen...Deterministic | 1.547 us | 0.0077 us | 0.0064 us |  1.45 |    0.01 | 0.0744 |    1264 B |
+| GuidPhantom                   | 1.564 us | 0.0162 us | 0.0152 us |  1.46 |    0.02 | 0.0744 |    1264 B |
+| Elephant.Uuidv5Utilities      | 1.761 us | 0.0131 us | 0.0123 us |  1.65 |    0.02 | 0.0763 |    1296 B |
+| unique                        | 1.985 us | 0.0263 us | 0.0246 us |  1.86 |    0.03 | 0.0916 |    1592 B |
 
 ### .NET 5.0.17 (5.0.17, 5.0.1722.21314), X64 RyuJIT x86-64-v3
-| Method                   | Mean     | Error     | StdDev    | Ratio | Gen0   | Allocated |
-|------------------------- |---------:|----------:|----------:|------:|-------:|----------:|
-| DeterministicGuids       | 1.087 us | 0.0012 us | 0.0010 us |  1.00 |      - |         - |
-| UUIDNext                 | 1.164 us | 0.0011 us | 0.0010 us |  1.07 |      - |         - |
-| NGuid                    | 1.730 us | 0.0072 us | 0.0064 us |  1.59 | 0.0820 |    1376 B |
-| GuidPhantom              | 1.560 us | 0.0062 us | 0.0055 us |  1.44 | 0.0744 |    1264 B |
-| Elephant.Uuidv5Utilities | 1.757 us | 0.0046 us | 0.0041 us |  1.62 | 0.0763 |    1296 B |
-| unique                   | 1.928 us | 0.0105 us | 0.0098 us |  1.77 | 0.0916 |    1592 B |
+| Method                   | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated |
+|------------------------- |---------:|----------:|----------:|------:|--------:|-------:|----------:|
+| DeterministicGuids       | 1.069 us | 0.0020 us | 0.0015 us |  1.00 |    0.00 |      - |         - |
+| UUIDNext                 | 1.139 us | 0.0016 us | 0.0013 us |  1.07 |    0.00 |      - |         - |
+| SequentialGuid           | 1.484 us | 0.0096 us | 0.0080 us |  1.39 |    0.01 | 0.0458 |     768 B |
+| GuidPhantom              | 1.584 us | 0.0145 us | 0.0136 us |  1.48 |    0.01 | 0.0744 |    1264 B |
+| Elephant.Uuidv5Utilities | 1.801 us | 0.0188 us | 0.0175 us |  1.68 |    0.02 | 0.0763 |    1296 B |
+| NGuid                    | 1.819 us | 0.0143 us | 0.0133 us |  1.70 |    0.01 | 0.0820 |    1376 B |
+| unique                   | 2.022 us | 0.0161 us | 0.0134 us |  1.89 |    0.01 | 0.0916 |    1592 B |
 
 ### .NET Core 3.1.32 (3.1.32, 4.700.22.55902), X64 RyuJIT VectorSize=256
-| Method                   | Mean     | Error     | StdDev    | Ratio | Gen0   | Allocated |
-|------------------------- |---------:|----------:|----------:|------:|-------:|----------:|
-| DeterministicGuids       | 1.140 us | 0.0014 us | 0.0012 us |  1.00 |      - |         - |
-| UUIDNext                 | 1.152 us | 0.0008 us | 0.0007 us |  1.01 |      - |         - |
-| NGuid                    | 1.857 us | 0.0091 us | 0.0081 us |  1.63 | 0.0820 |    1376 B |
-| GuidPhantom              | 1.682 us | 0.0083 us | 0.0070 us |  1.48 | 0.0744 |    1264 B |
-| Elephant.Uuidv5Utilities | 1.887 us | 0.0110 us | 0.0103 us |  1.66 | 0.0763 |    1296 B |
-| unique                   | 2.441 us | 0.0080 us | 0.0071 us |  2.14 | 0.0916 |    1592 B |
+| Method                   | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated |
+|------------------------- |---------:|----------:|----------:|------:|--------:|-------:|----------:|
+| DeterministicGuids       | 1.137 us | 0.0067 us | 0.0059 us |  1.00 |    0.00 |      - |         - |
+| UUIDNext                 | 1.170 us | 0.0102 us | 0.0095 us |  1.03 |    0.01 |      - |         - |
+| SequentialGuid           | 1.552 us | 0.0188 us | 0.0176 us |  1.37 |    0.02 | 0.0458 |     768 B |
+| GuidPhantom              | 1.696 us | 0.0187 us | 0.0175 us |  1.49 |    0.02 | 0.0744 |    1264 B |
+| Elephant.Uuidv5Utilities | 1.930 us | 0.0151 us | 0.0134 us |  1.70 |    0.01 | 0.0763 |    1296 B |
+| NGuid                    | 1.884 us | 0.0168 us | 0.0149 us |  1.66 |    0.02 | 0.0801 |    1376 B |
+| unique                   | 2.482 us | 0.0165 us | 0.0146 us |  2.18 |    0.02 | 0.0916 |    1592 B |
 
-### .NET Framework 4.8.1 (4.8.9310.0), X64 RyuJIT VectorSize=256
-| Method                   | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Allocated | Alloc Ratio |
-|------------------------- |---------:|----------:|----------:|------:|--------:|-------:|----------:|------------:|
-| DeterministicGuids       | 2.730 us | 0.0054 us | 0.0045 us |  1.00 |    0.00 | 0.0305 |     209 B |        1.00 |
-| UUIDNext                 | 2.551 us | 0.0138 us | 0.0123 us |  0.93 |    0.00 | 0.1106 |     698 B |        3.34 |
-| NGuid                    | 9.555 us | 0.0803 us | 0.0751 us |  3.50 |    0.03 | 0.4578 |    2937 B |       14.05 |
-| GuidPhantom              | 3.887 us | 0.0122 us | 0.0114 us |  1.42 |    0.00 | 0.2441 |    1581 B |        7.56 |
-| Elephant.Uuidv5Utilities | 3.645 us | 0.0115 us | 0.0096 us |  1.34 |    0.00 | 0.2403 |    1533 B |        7.33 |
-| unique                   | 4.892 us | 0.0118 us | 0.0098 us |  1.79 |    0.00 | 0.2975 |    1910 B |        9.14 |
+### .NET Framework 4.8.1 (4.8.9363.0), X64 RyuJIT VectorSize=256
+| Method                   | Mean     | Error     | StdDev    | Ratio | RatioSD | Gen0   | Gen1   | Allocated | Alloc Ratio |
+|------------------------- |---------:|----------:|----------:|------:|--------:|-------:|-------:|----------:|------------:|
+| DeterministicGuids       | 2.816 us | 0.0134 us | 0.0112 us |  1.00 |    0.00 | 0.0305 | 0.0038 |     209 B |        1.00 |
+| UUIDNext                 | 2.661 us | 0.0193 us | 0.0181 us |  0.94 |    0.01 | 0.1106 | 0.0038 |     698 B |        3.34 |
+| Elephant.Uuidv5Utilities | 3.661 us | 0.0188 us | 0.0166 us |  1.30 |    0.01 | 0.2403 | 0.0038 |    1533 B |        7.33 |
+| SequentialGuid           | 3.426 us | 0.0295 us | 0.0261 us |  1.22 |    0.01 | 0.2480 | 0.0038 |    1573 B |        7.53 |
+| GuidPhantom              | 4.101 us | 0.0249 us | 0.0221 us |  1.46 |    0.01 | 0.2441 | 0.0076 |    1581 B |        7.56 |
+| unique                   | 5.008 us | 0.0378 us | 0.0335 us |  1.78 |    0.01 | 0.2975 | 0.0076 |    1910 B |        9.14 |
+| NGuid                    | 9.998 us | 0.0877 us | 0.0821 us |  3.55 |    0.03 | 0.4578 | 0.0153 |    2937 B |       14.05 |
 
 ## Credits
 Check out our [list of contributors](https://github.com/MarkCiliaVincenti/DeterministicGuids/blob/master/CONTRIBUTORS.md)!
