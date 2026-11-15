@@ -25,7 +25,8 @@ jobs:
             7.0.x
             8.0.x
             9.0.x
-            10.0.203
+            10.0.x
+            11.0.100
         
     - name: Restore dependencies
       run: dotnet restore
@@ -41,17 +42,21 @@ jobs:
       with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+    - name: Run benchmark (net11.0)
+      run: dotnet run --framework net11.0 --configuration Release --exporters json --filter '*'
+      working-directory: Benchmarks
+
     - name: Run benchmark (net10.0)
       run: dotnet run --framework net10.0 --configuration Release --exporters json --filter '*'
       working-directory: Benchmarks
 
     - name: Run benchmark (net9.0)
       run: dotnet run --framework net9.0 --configuration Release --exporters json --filter '*'
-      working-directory: Benchmarks
+      working-directory: BenchmarksNet8
 
     - name: Run benchmark (net8.0)
       run: dotnet run --framework net8.0 --configuration Release --exporters json --filter '*'
-      working-directory: Benchmarks
+      working-directory: BenchmarksNet8
 
     - name: Run benchmark (net7.0)
       run: dotnet run --framework net7.0 --configuration Release --exporters json --filter '*'

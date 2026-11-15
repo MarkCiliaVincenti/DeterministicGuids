@@ -5,6 +5,7 @@ using Elephant.Uuidv5Utilities;
 using Enbrea.GuidFactory;
 using GuidPhantom;
 using NGuid;
+using SequentialGuid;
 using Unique.CSharp;
 using UUIDNext;
 
@@ -38,7 +39,7 @@ public class Benchmarks
 
     [Benchmark(Description = "Enbrea.GuidFactory")]
     public Guid Enbrea_GuidFactory() =>
-        GuidGenerator.Create(ns, name);
+        GuidGenerator.CreateVersion5(ns, name);
 
     [Benchmark(Description = "Elephant.Uuidv5Utilities")]
     public Guid Elephant_Uuidv5Utilities() =>
@@ -47,4 +48,8 @@ public class Benchmarks
     [Benchmark(Description = "unique")]
     public Guid Unique() =>
         NamedGuid.NewGuid(ns, name);
+
+    [Benchmark(Description = "SequentialGuid")]
+    public Guid SequentialGuid() =>
+        GuidV5.Create(ns, name);
 }

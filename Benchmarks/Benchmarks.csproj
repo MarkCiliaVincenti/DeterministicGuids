@@ -2,18 +2,19 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>net10.0;net11.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic" Version="5.0.0" />
+		<PackageReference Include="Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic" Version="5.1.0" />
 		<PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
 		<PackageReference Include="Elephant.Uuidv5Utilities" Version="1.0.0" />
-		<PackageReference Include="Enbrea.GuidFactory" Version="0.11.0" />
+		<PackageReference Include="Enbrea.GuidFactory" Version="0.14.0" />
 		<PackageReference Include="GuidPhantom" Version="0.0.8" />
 		<PackageReference Include="NGuid" Version="1.0.0" />
+		<PackageReference Include="SequentialGuid" Version="6.2.0" />
 		<PackageReference Include="unique" Version="0.0.1" />
 		<PackageReference Include="UUIDNext" Version="4.2.4" />
 	</ItemGroup>

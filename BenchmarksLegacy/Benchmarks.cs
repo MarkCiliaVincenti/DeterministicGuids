@@ -3,6 +3,7 @@ using DeterministicGuids;
 using Elephant.Uuidv5Utilities;
 using GuidPhantom;
 using NGuid;
+using SequentialGuid;
 using Unique.CSharp;
 using UUIDNext;
 
@@ -37,4 +38,8 @@ public class Benchmarks
     [Benchmark(Description = "unique")]
     public Guid Unique() =>
         NamedGuid.NewGuid(ns, name);
+
+    [Benchmark(Description = "SequentialGuid")]
+    public Guid SequentialGuid() =>
+        GuidV5.Create(ns, name);
 }
